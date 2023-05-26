@@ -7,12 +7,27 @@ public class Clientes {
     this.clientes = new ArrayList<Cliente>();
   }
 
-  public boolean checkNomeCliente(int cod) {
+  private boolean checkCodClienteJaExiste(int cod) {
     for (Cliente c : clientes) {
       if (c.getCod() == cod) {
         return true;
       }
     }
     return false;
+  }
+
+  private boolean checkEmailClienteJaExiste(String email) {
+    for (Cliente c : clientes) {
+      if (c.getEmail().equals(email)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean adicionaCliente(Cliente c) {
+    if (checkEmailClienteJaExiste(c.getEmail()) | checkCodClienteJaExiste(c.getCod()))
+      return false;
+    return clientes.add(c);
   }
 }

@@ -7,13 +7,19 @@ public class Portos {
     this.portos = new ArrayList<Porto>();
   }
 
-  public boolean checkPortoId(int id) {
+  private boolean checkPortoIdJaExiste(int id) {
     for (Porto p : portos) {
       if (p.getId() == id) {
         return true;
       }
     }
     return false;
+  }
+
+  public boolean adicionaPorto(Porto p) {
+    if (checkPortoIdJaExiste(p.getId()))
+      return false;
+    return portos.add(p);
   }
 
 }

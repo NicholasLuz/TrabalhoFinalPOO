@@ -6,4 +6,12 @@ public class TipoCarga {
     this.numero = numero;
     this.descricao = descricao;
   }
+
+  public int getNumero() {
+    return numero;
+  }
+
+  public String getDescricao() {
+    return descricao;
+  }
 }

@@ -7,12 +7,18 @@ public class Frota {
     this.frota = new ArrayList<Navio>();
   }
 
-  public boolean checkNomeNavio(String nome) {
+  private boolean checkNomeNavioJaExiste(String nome) {
     for (Navio n : frota) {
       if (n.getNome().equals(nome)) {
         return true;
       }
     }
     return false;
+  }
+
+  public boolean adicionaNavio(Navio n) {
+    if (checkNomeNavioJaExiste(n.getNome()))
+      return false;
+    return frota.add(n);
   }
 }
