@@ -1,20 +1,21 @@
 public class Carga {
-  private int identificador;
-  private int peso;
-  private double valorDeclarado;
-  private int tempoMaximo;
-  private Cliente cliente;
-  private Porto portoOrigem, portoDestino;
-  private TipoCarga tipoCarga;
-  private String situacao;
+  private int identificador, idCliente, idPortoOrigem, idPortoDestino, peso, tempoMaximo, idTipoCarga;
+  private double valorDeclarado, valorFrete;
+  private String prioridade, situacao;
   private Navio navio;
-  private double valorFrete;
 
-  public Carga(int identificador, int peso, double valorDeclarado, int tempoMaximo) {
+  public Carga(int identificador, int idCliente, int idPortoOrigem, int idPortoDestino, int peso, double valorDeclarado,
+      int tempoMaximo, int idTipoCarga, String prioridade, String situacao) {
     this.identificador = identificador;
+    this.idCliente = idCliente;
+    this.idPortoOrigem = idPortoOrigem;
+    this.idPortoDestino = idPortoDestino;
     this.peso = peso;
     this.valorDeclarado = valorDeclarado;
     this.tempoMaximo = tempoMaximo;
+    this.idTipoCarga = idTipoCarga;
+    this.prioridade = prioridade;
+    this.situacao = situacao;
   }
 
   public int getId() {
@@ -33,9 +34,24 @@ public class Carga {
     return tempoMaximo;
   }
 
+  public String getSituacao() {
+    return situacao;
+  }
+
+  public boolean setSituacao(String sit) {
+    for (Situacao s : Situacao.values()) {
+      if (sit.equals(s.name())) {
+        prioridade = sit;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
   public String toString() {
-    return ("Id: " + identificador + "\nPorto de Origem: " + portoOrigem + "\nPorto de Destino: " + portoDestino
-        + "\nCliente: " + cliente.toString() + "\nTipo de Carga: " + tipoCarga + "\nSituação: " + situacao
+    return ("Id: " + identificador + "\nPorto de Origem: " + idPortoOrigem + "\nPorto de Destino: " + idPortoDestino
+        + "\nCliente: " + idCliente + "\nTipo de Carga: " + idTipoCarga + "\nSituação: " + situacao
         + ((navio != null) ? ("\nNavio: " + navio.toString() + "\nValor do frete: " + valorFrete)
             : "\nNão há navios designados para esta carga."));
   }

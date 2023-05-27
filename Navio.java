@@ -36,4 +36,8 @@ public class Navio {
   public boolean addCarga(Carga carga) {
     return historicoCargas.add(carga);
   }
+
+  public boolean isTransporting() {
+    return isTransporting;
+  }
 }
