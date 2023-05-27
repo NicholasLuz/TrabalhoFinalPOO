@@ -33,4 +33,7 @@ public class App {
     return clientes.adicionaCliente(c);
   }
 
+  public void mostrarCargas() {
+    // cargas
+  }
 }

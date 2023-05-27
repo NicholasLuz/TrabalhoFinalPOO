@@ -15,4 +15,13 @@ public class Cargas {
     }
     return false;
   }
+
+  public void mostrarCargas() {
+    for (Carga c : cargas) {
+      System.out.println(c.toString());
+    }
+    if (cargas.size() == 0) {
+      System.out.println("Não há cargas cadastradas.");
+    }
+  }
 }

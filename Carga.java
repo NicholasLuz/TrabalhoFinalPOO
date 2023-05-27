@@ -5,6 +5,10 @@ public class Carga {
   private int tempoMaximo;
   private Cliente cliente;
   private Porto portoOrigem, portoDestino;
+  private TipoCarga tipoCarga;
+  private String situacao;
+  private Navio navio;
+  private double valorFrete;
 
   public Carga(int identificador, int peso, double valorDeclarado, int tempoMaximo) {
     this.identificador = identificador;
@@ -29,4 +33,10 @@ public class Carga {
     return tempoMaximo;
   }
 
+  public String toString() {
+    return ("Id: " + identificador + "\nPorto de Origem: " + portoOrigem + "\nPorto de Destino: " + portoDestino
+        + "\nCliente: " + cliente.toString() + "\nTipo de Carga: " + tipoCarga + "\nSituação: " + situacao
+        + ((navio != null) ? ("\nNavio: " + navio.toString() + "\nValor do frete: " + valorFrete)
+            : "\nNão há navios designados para esta carga."));
+  }
 }
