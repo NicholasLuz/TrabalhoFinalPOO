@@ -5,7 +5,7 @@ public class Carga {
   private Navio navio;
 
   public Carga(int identificador, int idCliente, int idPortoOrigem, int idPortoDestino, int peso, double valorDeclarado,
-      int tempoMaximo, int idTipoCarga, String prioridade, String situacao) {
+      int tempoMaximo, int idTipoCarga, String prioridade) {
     this.identificador = identificador;
     this.idCliente = idCliente;
     this.idPortoOrigem = idPortoOrigem;
@@ -15,7 +15,7 @@ public class Carga {
     this.tempoMaximo = tempoMaximo;
     this.idTipoCarga = idTipoCarga;
     this.prioridade = prioridade;
-    this.situacao = situacao;
+    this.situacao = Situacao.PENDENTE.name();
   }
 
   public int getId() {

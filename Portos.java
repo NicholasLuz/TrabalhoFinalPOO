@@ -22,4 +22,13 @@ public class Portos {
     return portos.add(p);
   }
 
+  public void mostrarPortos() {
+    for (Porto p : portos) {
+      System.out.println("Id: " + p.getId() + ";Nome: " + p.getNome() + ";País: " + p.getPais());
+    }
+    if (portos.size() == 0) {
+      System.out.println("Não há cargas cadastradas.");
+    }
+  }
+
 }
