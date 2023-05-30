@@ -30,4 +30,14 @@ public class Clientes {
       return false;
     return clientes.add(c);
   }
+
+  public void mostrarClientes() {
+    for (Cliente c : clientes) {
+      System.out.println(
+          "Código: " + c.getCod() + ";Nome: " + c.getNome() + ";Email: " + c.getEmail());
+    }
+    if (clientes.size() == 0) {
+      System.out.println("Não há clientes cadastrados.");
+    }
+  }
 }

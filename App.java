@@ -15,6 +15,7 @@ public class App {
   private Clientes clientes = new Clientes();
   private Portos portos = new Portos();
   private Distancias distancias = new Distancias();
+  private TiposCargas tiposCargas = new TiposCargas();
   private Scanner entrada = null, entradaTerminal; // Atributo para entrada de dados
   private PrintStream standard = System.out; // variavel para trocar scanner para terminal
   private PrintStream streamSaida;
@@ -67,6 +68,9 @@ public class App {
   public void executar() {
     portos.mostrarPortos();
     distancias.mostrarDistancias();
+    frota.mostrarNavios();
+    clientes.mostrarClientes();
+    tiposCargas.mostrarTiposCargas();
   }
 
   public void readPortos(ArrayList<String> linhas, String fileName) {
@@ -104,19 +108,84 @@ public class App {
   }
 
   public void readNavios(ArrayList<String> linhas, String fileName) {
-
+    for (int i = 0; i < linhas.size(); i++) {
+      try {
+        String[] campos = linhas.get(i).split(";");
+        String nome = campos[0];
+        double velocidade = Double.parseDouble(campos[1].replaceAll(",", "."));
+        double autonomia = Double.parseDouble(campos[2].replaceAll(",", "."));
+        double custoMilha = Double.parseDouble(campos[3].replaceAll(",", "."));
+        Navio n = new Navio(nome, velocidade, autonomia, custoMilha);
+        frota.adicionaNavio(n);
+      } catch (Exception e) {
+        System.setOut(standard);
+        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
+        System.setOut(streamSaida);
+      }
+    }
   }
 
   public void readClientes(ArrayList<String> linhas, String fileName) {
-
+    for (int i = 0; i < linhas.size(); i++) {
+      try {
+        String[] campos = linhas.get(i).split(";");
+        int codCli = Integer.parseInt(campos[0]);
+        String nomeCli = campos[1];
+        String emailCli = campos[2];
+        Cliente c = new Cliente(codCli, nomeCli, emailCli);
+        clientes.adicionaCliente(c);
+      } catch (Exception e) {
+        System.setOut(standard);
+        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
+        System.setOut(streamSaida);
+      }
+    }
   }
 
   public void readTiposCargas(ArrayList<String> linhas, String fileName) {
+    for (int i = 0; i < linhas.size(); i++) {
+      try {
+        String[] campos = linhas.get(i).split(";");
+        int numero = Integer.parseInt(campos[0]);
+        String descricao = campos[1];
+        String categoria = campos[2];
+        if (categoria.equals("DURAVEL")) {
+          String setor = campos[3];
+          String material = campos[4];
+          double ipi = Double.parseDouble(campos[5].replaceAll(",", "."));
+          CargaDuravel c = new CargaDuravel(numero, descricao, setor, material, ipi);
+          tiposCargas.adicionaTipoCarga(c);
+        } else if (categoria.equals("PERECIVEL")) {
+          String origem = campos[3];
+          int tempoMaximo = Integer.parseInt(campos[4]);
+          CargaPerecivel c = new CargaPerecivel(numero, descricao, origem, tempoMaximo);
+          tiposCargas.adicionaTipoCarga(c);
 
+        }
+      } catch (Exception e) {
+        System.setOut(standard);
+        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
+        System.setOut(streamSaida);
+      }
+    }
   }
 
   public void readCargas(ArrayList<String> linhas, String fileName) {
-
+    // for (int i = 0; i < linhas.size(); i++) {
+    // try {
+    // String[] campos = linhas.get(i).split(";");
+    // int codCli = Integer.parseInt(campos[0]);
+    // String nomeCli = campos[1];
+    // String emailCli = campos[2];
+    // Cliente c = new Cliente(codCli, nomeCli, emailCli);
+    // clientes.adicionaCliente(c);
+    // } catch (Exception e) {
+    // System.setOut(standard);
+    // System.out.println("Linha " + (i + 2) + " do arquivo " + fileName +
+    // "apresenta erros. Ajuste o arquivo.");
+    // System.setOut(streamSaida);
+    // }
+    // }
   }
 
   public boolean cadastraPorto(Porto p) {

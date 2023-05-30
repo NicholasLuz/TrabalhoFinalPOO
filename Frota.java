@@ -21,4 +21,15 @@ public class Frota {
       return false;
     return frota.add(n);
   }
+
+  public void mostrarNavios() {
+    for (Navio n : frota) {
+      System.out.println(
+          "Nome: " + n.getNome() + ";Velocidade: " + n.getVelocidade() + ";Autonomia: " + n.getAutonomia()
+              + ";CustoMilhaBasico: " + n.getCustoPorMilhaBasico());
+    }
+    if (frota.size() == 0) {
+      System.out.println("Não há navios cadastrados.");
+    }
+  }
 }

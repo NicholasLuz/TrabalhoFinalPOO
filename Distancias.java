@@ -28,7 +28,7 @@ public class Distancias {
           "IdOrigem: " + d.getIdOrigem() + ";IdDestino: " + d.getIdDestino() + ";Distancia: " + d.getDistancia());
     }
     if (distancias.size() == 0) {
-      System.out.println("Não há cargas cadastradas.");
+      System.out.println("Não há distâncias cadastradas.");
     }
   }
 }
