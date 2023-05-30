@@ -21,4 +21,14 @@ public class Distancias {
       return false;
     return distancias.add(d);
   }
+
+  public void mostrarDistancias() {
+    for (Distancia d : distancias) {
+      System.out.println(
+          "IdOrigem: " + d.getIdOrigem() + ";IdDestino: " + d.getIdDestino() + ";Distancia: " + d.getDistancia());
+    }
+    if (distancias.size() == 0) {
+      System.out.println("Não há cargas cadastradas.");
+    }
+  }
 }

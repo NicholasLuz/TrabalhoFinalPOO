@@ -14,6 +14,7 @@ public class App {
   private Cargas cargas = new Cargas();
   private Clientes clientes = new Clientes();
   private Portos portos = new Portos();
+  private Distancias distancias = new Distancias();
   private Scanner entrada = null, entradaTerminal; // Atributo para entrada de dados
   private PrintStream standard = System.out; // variavel para trocar scanner para terminal
   private PrintStream streamSaida;
@@ -27,6 +28,7 @@ public class App {
       for (String file : nomesArquivos) {
         BufferedReader streamEntrada = new BufferedReader(new FileReader(filePrefix + "-" + file + ".csv"));
         entrada = new Scanner(streamEntrada); // Usa como entrada um arquivo
+        entrada.useLocale(Locale.ENGLISH);
         ArrayList<String> linhas = new ArrayList<>();
         entrada.nextLine();
         while (entrada.hasNextLine()) {
@@ -60,11 +62,11 @@ public class App {
     } catch (Exception e) {
       System.out.println(e);
     }
-    entrada.useLocale(Locale.ENGLISH);
   }
 
   public void executar() {
     portos.mostrarPortos();
+    distancias.mostrarDistancias();
   }
 
   public void readPortos(ArrayList<String> linhas, String fileName) {
@@ -90,12 +92,12 @@ public class App {
         String[] campos = linhas.get(i).split(";");
         int idOrigem = Integer.parseInt(campos[0]);
         int idDestino = Integer.parseInt(campos[1]);
-        double distancia = Double.parseDouble(campos[2]);
-        // Porto p = new Porto(idPorto, nomePorto, paisPorto);
-        // portos.adicionaPorto(p);
+        double distancia = Double.parseDouble(campos[2].replaceAll(",", "."));
+        Distancia d = new Distancia(idOrigem, idDestino, distancia);
+        distancias.adicionaDistancias(d);
       } catch (Exception e) {
         System.setOut(standard);
-        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + " apresenta erros. Ajuste o arquivo.");
+        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
         System.setOut(streamSaida);
       }
     }
