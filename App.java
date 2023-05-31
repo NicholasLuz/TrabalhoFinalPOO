@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Scanner;
-
+//testando tudo
 public class App {
   private Frota frota = new Frota();
   private Cargas cargas = new Cargas();
