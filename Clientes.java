@@ -7,7 +7,7 @@ public class Clientes {
     this.clientes = new ArrayList<Cliente>();
   }
 
-  private boolean checkCodClienteJaExiste(int cod) {
+  public boolean checkCodClienteJaExiste(int cod) {
     for (Cliente c : clientes) {
       if (c.getCod() == cod) {
         return true;
@@ -26,7 +26,7 @@ public class Clientes {
   }
 
   public boolean adicionaCliente(Cliente c) {
-    if (checkEmailClienteJaExiste(c.getEmail()) | checkCodClienteJaExiste(c.getCod()))
+    if (checkEmailClienteJaExiste(c.getEmail()) || checkCodClienteJaExiste(c.getCod()))
       return false;
     return clientes.add(c);
   }
@@ -39,5 +39,9 @@ public class Clientes {
     if (clientes.size() == 0) {
       System.out.println("Não há clientes cadastrados.");
     }
+  }
+
+  public void sort() {
+    clientes.sort((c1, c2) -> c1.getCod() - c2.getCod());
   }
 }

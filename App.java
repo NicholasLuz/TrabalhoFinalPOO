@@ -6,8 +6,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+
+import javax.naming.directory.NoSuchAttributeException;
 
 public class App {
   private Frota frota = new Frota();
@@ -71,6 +75,7 @@ public class App {
     frota.mostrarNavios();
     clientes.mostrarClientes();
     tiposCargas.mostrarTiposCargas();
+    consultarCargas();
   }
 
   public void readPortos(ArrayList<String> linhas, String fileName) {
@@ -88,6 +93,7 @@ public class App {
         System.setOut(streamSaida);
       }
     }
+    portos.sort();
   }
 
   public void readDistancias(ArrayList<String> linhas, String fileName) {
@@ -123,6 +129,7 @@ public class App {
         System.setOut(streamSaida);
       }
     }
+    frota.sort();
   }
 
   public void readClientes(ArrayList<String> linhas, String fileName) {
@@ -140,6 +147,7 @@ public class App {
         System.setOut(streamSaida);
       }
     }
+    clientes.sort();
   }
 
   public void readTiposCargas(ArrayList<String> linhas, String fileName) {
@@ -168,39 +176,109 @@ public class App {
         System.setOut(streamSaida);
       }
     }
+    tiposCargas.sort();
   }
 
   public void readCargas(ArrayList<String> linhas, String fileName) {
-    // for (int i = 0; i < linhas.size(); i++) {
-    // try {
-    // String[] campos = linhas.get(i).split(";");
-    // int codCli = Integer.parseInt(campos[0]);
-    // String nomeCli = campos[1];
-    // String emailCli = campos[2];
-    // Cliente c = new Cliente(codCli, nomeCli, emailCli);
-    // clientes.adicionaCliente(c);
-    // } catch (Exception e) {
-    // System.setOut(standard);
-    // System.out.println("Linha " + (i + 2) + " do arquivo " + fileName +
-    // "apresenta erros. Ajuste o arquivo.");
-    // System.setOut(streamSaida);
-    // }
-    // }
+    for (int i = 0; i < linhas.size(); i++) {
+      try {
+        String[] campos = linhas.get(i).split(";");
+        int codigo = Integer.parseInt(campos[0]);
+        int codCli = Integer.parseInt(campos[1]);
+        int idOrigem = Integer.parseInt(campos[2]);
+        int idDestino = Integer.parseInt(campos[3]);
+        int peso = Integer.parseInt(campos[4]);
+        double valorDeclarado = Double.parseDouble(campos[5].replaceAll(",", "."));
+        int tempoMaximo = Integer.parseInt(campos[6]);
+        int idTipoCarga = Integer.parseInt(campos[7]);
+        String prioridade = campos[8];
+        String situacao = campos[9];
+
+        if (portos.checkPortoIdJaExiste(idOrigem) && portos.checkPortoIdJaExiste(idDestino)
+            && clientes.checkCodClienteJaExiste(codCli) && tiposCargas.checkTipoCargaJaExiste(idTipoCarga)) {
+          Carga c = new Carga(codigo, codCli, idOrigem, idDestino, peso, valorDeclarado, tempoMaximo, idTipoCarga,
+              prioridade, situacao);
+          cargas.adicionaCarga(c);
+        } else {
+          System.setOut(standard);
+          System.out.println("Linha " + (i + 2) + " do arquivo " + fileName
+              + "apresenta erros. Informações não existentes no cadastro da carga.");
+          System.setOut(streamSaida);
+        }
+
+      } catch (Exception e) {
+        System.setOut(standard);
+        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
+        System.setOut(streamSaida);
+      }
+    }
+    cargas.sort();
   }
 
-  public boolean cadastraPorto(Porto p) {
+  public boolean cadastraNovoPorto(Porto p) {
     return portos.adicionaPorto(p);
   }
 
-  public boolean cadastraNavio(Navio n) {
+  public boolean cadastraNovoNavio(Navio n) {
     return frota.adicionaNavio(n);
   }
 
-  public boolean cadastraCliente(Cliente c) {
+  public boolean cadastraNovoCliente(Cliente c) {
     return clientes.adicionaCliente(c);
   }
 
-  public void mostrarCargas() {
-    // cargas
+  public void consultarCargas() {
+    cargas.mostrarCargas();
+  }
+
+  public void fretarCargas() {
+    List<Carga> cargasPendentes = cargas.getPendentes();
+    for (Carga c : cargasPendentes) {
+      try {
+        double distancia = distancias.getDistanciaPortos(c.getIdPortoOrigem(), c.getIdPortoDestino());
+
+        if (distancia == -1) {
+          System.setOut(standard);
+          System.out.println("Distância entre portos não cadastrada, ou código de portos inválidos.");
+          System.setOut(streamSaida);
+          continue;
+        }
+        double precoPeso = tiposCargas.getPrecoPeso(c.getIdTipoCarga(), c.getPeso(),
+            c.getValorDeclarado());
+
+        double precoRegiao = (portos.isNacional(c.getIdPortoOrigem(), c.getIdPortoDestino()) ? 10000.0 : 50000.0);
+
+        boolean haNavioAutonomia = frota.haNavioAutonomia(distancia);
+        if (!haNavioAutonomia) {
+          c.setSituacao(Situacao.CANCELADO.name());
+          System.setOut(standard);
+          System.out.println(
+              "Não há navios com autonomia suficiente para realizar o transporte da carga de id: " + c.getId());
+          System.setOut(streamSaida);
+          continue;
+        }
+
+        Navio melhorNavio = frota.getMelhorNavio(c.getPrioridade(), distancia);
+
+        if (melhorNavio == null) {
+          System.setOut(standard);
+          System.out.println("Não há navios que possam realizar o transporte da carga de id: " + c.getId() + ".");
+          System.setOut(streamSaida);
+          continue;
+        }
+
+        double custoAjustado = (c.getPrioridade().equals(Prioridade.RAPIDO.name())
+            ? (melhorNavio.getCustoPorMilhaBasico() * 2)
+            : melhorNavio.getCustoPorMilhaBasico());
+
+        double valorFrete = (distancia * custoAjustado) + precoPeso + precoRegiao;
+
+      } catch (Exception e) {
+        System.setOut(standard);
+        System.out.println("Erro.");
+        System.setOut(streamSaida);
+      }
+    }
+
   }
 }

@@ -50,7 +50,7 @@ public class FormularioCliente extends JFrame {
     JPanel painel = new JPanel(grid);
     painel.add(formTitle);
     painel.add(painelCampos);
-    FlowLayout botaoLayout = new FlowLayout(FlowLayout.RIGHT);
+    FlowLayout botaoLayout = new FlowLayout(FlowLayout.LEFT);
     JPanel botaoPainel = new JPanel(botaoLayout);
     botaoPainel.add(botao);
     painel.add(botaoPainel);

@@ -40,4 +40,8 @@ public class Navio {
   public boolean isTransporting() {
     return isTransporting;
   }
+
+  public void setIsTransporting() {
+    isTransporting = !isTransporting;
+  }
 }

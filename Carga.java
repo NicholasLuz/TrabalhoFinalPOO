@@ -1,11 +1,11 @@
 public class Carga {
   private int identificador, idCliente, idPortoOrigem, idPortoDestino, peso, tempoMaximo, idTipoCarga;
-  private double valorDeclarado, valorFrete;
+  private double valorDeclarado, valorFrete, freteSemDist;
   private String prioridade, situacao;
   private Navio navio;
 
   public Carga(int identificador, int idCliente, int idPortoOrigem, int idPortoDestino, int peso, double valorDeclarado,
-      int tempoMaximo, int idTipoCarga, String prioridade) {
+      int tempoMaximo, int idTipoCarga, String prioridade, String situacao) {
     this.identificador = identificador;
     this.idCliente = idCliente;
     this.idPortoOrigem = idPortoOrigem;
@@ -15,11 +15,23 @@ public class Carga {
     this.tempoMaximo = tempoMaximo;
     this.idTipoCarga = idTipoCarga;
     this.prioridade = prioridade;
-    this.situacao = Situacao.PENDENTE.name();
+    this.situacao = situacao;
   }
 
   public int getId() {
     return identificador;
+  }
+
+  public int getIdCliente() {
+    return idCliente;
+  }
+
+  public int getIdPortoOrigem() {
+    return idPortoOrigem;
+  }
+
+  public int getIdPortoDestino() {
+    return idPortoDestino;
   }
 
   public int getPeso() {
@@ -34,11 +46,22 @@ public class Carga {
     return tempoMaximo;
   }
 
+  public int getIdTipoCarga() {
+    return idTipoCarga;
+  }
+
+  public String getPrioridade() {
+    return prioridade;
+  }
+
   public String getSituacao() {
     return situacao;
   }
 
   public boolean setSituacao(String sit) {
+    if (situacao.equals(Situacao.CANCELADO.name())) {
+      return false;
+    }
     for (Situacao s : Situacao.values()) {
       if (sit.equals(s.name())) {
         prioridade = sit;
@@ -55,4 +78,5 @@ public class Carga {
         + ((navio != null) ? ("\nNavio: " + navio.toString() + "\nValor do frete: " + valorFrete)
             : "\nNão há navios designados para esta carga."));
   }
+
 }

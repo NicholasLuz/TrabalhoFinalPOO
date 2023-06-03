@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class Portos {
   private ArrayList<Porto> portos;
@@ -7,7 +8,25 @@ public class Portos {
     this.portos = new ArrayList<Porto>();
   }
 
-  private boolean checkPortoIdJaExiste(int id) {
+  public boolean isNacional(int idOrigem, int idDestino) throws NoSuchElementException {
+    String origem = getPaisPorto(idOrigem);
+    String destino = getPaisPorto(idDestino);
+    if (origem.equals("Brasil") && destino.equals("Brasil")) {
+      return true;
+    }
+    return false;
+  }
+
+  private String getPaisPorto(int id) {
+    for (Porto p : portos) {
+      if (p.getId() == id) {
+        return p.getPais();
+      }
+    }
+    throw new NoSuchElementException();
+  }
+
+  public boolean checkPortoIdJaExiste(int id) {
     for (Porto p : portos) {
       if (p.getId() == id) {
         return true;
@@ -31,4 +50,7 @@ public class Portos {
     }
   }
 
+  public void sort() {
+    portos.sort((p1, p2) -> p1.getId() - p2.getId());
+  }
 }
