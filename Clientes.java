@@ -16,7 +16,7 @@ public class Clientes {
     return false;
   }
 
-  private boolean checkEmailClienteJaExiste(String email) {
+  public boolean checkEmailClienteJaExiste(String email) {
     for (Cliente c : clientes) {
       if (c.getEmail().equals(email)) {
         return true;
@@ -27,7 +27,9 @@ public class Clientes {
 
   public boolean adicionaCliente(Cliente c) {
     if (checkEmailClienteJaExiste(c.getEmail()) || checkCodClienteJaExiste(c.getCod()))
+    {
       return false;
+    }
     return clientes.add(c);
   }
 

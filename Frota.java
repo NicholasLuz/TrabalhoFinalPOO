@@ -46,8 +46,9 @@ public class Frota {
   }
 
   public boolean adicionaNavio(Navio n) {
-    if (checkNomeNavioJaExiste(n.getNome()))
+    if (checkNomeNavioJaExiste(n.getNome())) {
       return false;
+    }
     return frota.add(n);
   }
 

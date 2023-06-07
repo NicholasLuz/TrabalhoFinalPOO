@@ -59,15 +59,24 @@ public class Carga {
   }
 
   public boolean setSituacao(String sit) {
-    if (situacao.equals(Situacao.CANCELADO.name())) {
-      return false;
+    try {
+      if (situacao.equals(Situacao.CANCELADO.name())) {
+        throw new IllegalArgumentException("NAO FOI POSSIVEL ALTERAR SITUACAO DO PEDIDO, PEDIDO CANCELADO");
+      } else if (situacao.equals(Situacao.FINALIZADO.name())) {
+        throw new IllegalArgumentException("NAO FOI POSSIVEL ALTERAR SITUACAO DO PEDIDO, PEDIDO JA FINALIZADO");
+      }
+    }catch(Exception e){
+      System.out.println(e.getMessage());
     }
+    try{
     for (Situacao s : Situacao.values()) {
       if (sit.equals(s.name())) {
-        prioridade = sit;
+        situacao = sit;
         return true;
       }
     }
+    }catch (Exception e){
+      System.out.println("SITUACAO INSERIDA INVALIDA");}
     return false;
   }
 

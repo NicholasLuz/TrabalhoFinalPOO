@@ -18,6 +18,18 @@ public class Cargas {
     return false;
   }
 
+  public Carga getCargaId(int id){
+    if (checkCargaIdJaExiste(id)){
+      for (Carga c : cargas) {
+        if (c.getId() == id) {
+         return c;
+        }
+      }
+    }
+    return null;
+  }
+
+
   public boolean adicionaCarga(Carga c) {
     if (checkCargaIdJaExiste(c.getId()))
       return false;
