@@ -71,14 +71,6 @@ public class Frota {
     frota.sort((n1, n2) -> n1.getNome().compareTo(n2.getNome()));
   }
 
-  public void alteraSituacaoNavio(String nomeNav) {
-    for (Navio n : frota) {
-      if (n.getNome().equals(nomeNav)) {
-        n.setIsTransporting();
-      }
-    }
-  }
-
   public boolean haNavioAutonomia(double distancia) {
     for (Navio n : frota) {
       if (n.getAutonomia() <= distancia) {

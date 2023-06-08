@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import src.com.acmehandel.dados.*;
 import src.com.acmehandel.modelo.*;
+import src.com.acmehandel.util.CSVReader;
 
 public class App {
   private Frota frota = new Frota();
@@ -13,58 +14,13 @@ public class App {
   private Distancias distancias = new Distancias();
   private TiposCargas tiposCargas = new TiposCargas();
   private Scanner teclado = new Scanner(System.in);
-  private Scanner entrada = null, entradaTerminal; // Atributo para entrada de dados
+  private Scanner entradaTerminal; // Atributo para entrada de dados
   private PrintStream standard = System.out; // variavel para trocar scanner para terminal
   private PrintStream streamSaida;
-  private String[] nomesArquivos = { "PORTOS", "DISTANCIAS", "NAVIOS", "CLIENTES", "TIPOSCARGAS", "CARGAS" };
-
-  public App() {
-    entradaTerminal = new Scanner(System.in);
-    System.out.println("Insira o prefixo dos arquivos a serem lidos: "); // depois tem que mudar de EXEMPLOS pra
-                                                                         // porto/distancias/navio
-    String filePrefix = entradaTerminal.nextLine();
-    try {
-      for (String file : nomesArquivos) {
-        BufferedReader streamEntrada = new BufferedReader(
-            new FileReader("resources/csv/" + filePrefix + "-" + file + ".csv"));
-        entrada = new Scanner(streamEntrada); // Usa como entrada um arquivo
-        entrada.useLocale(Locale.ENGLISH);
-        ArrayList<String> linhas = new ArrayList<>();
-        entrada.nextLine();
-        while (entrada.hasNextLine()) {
-          linhas.add(entrada.nextLine());
-        }
-        switch (file) {
-          case "PORTOS":
-            readPortos(linhas, file);
-            break;
-          case "DISTANCIAS":
-            readDistancias(linhas, file);
-            break;
-          case "NAVIOS":
-            readNavios(linhas, file);
-            break;
-          case "CLIENTES":
-            readClientes(linhas, file);
-            break;
-          case "TIPOSCARGAS":
-            readTiposCargas(linhas, file);
-            break;
-          case "CARGAS":
-            readCargas(linhas, file);
-            break;
-          default:
-            break;
-        }
-        streamSaida = new PrintStream(new File("output/resultado.csv"));
-        System.setOut(streamSaida); // Usa como saida um arquivo
-      }
-    } catch (Exception e) {
-      System.out.println(e);
-    }
-  }
 
   public void executar() {
+    menu();
+    readFiles();
     portos.mostrarPortos();
     distancias.mostrarDistancias();
     frota.mostrarNavios();
@@ -73,141 +29,21 @@ public class App {
     consultarCargas();
   }
 
-  public void readPortos(ArrayList<String> linhas, String fileName) {
-    for (int i = 0; i < linhas.size(); i++) {
-      try {
-        String[] campos = linhas.get(i).split(";");
-        int idPorto = Integer.parseInt(campos[0]);
-        String nomePorto = campos[1];
-        String paisPorto = campos[2];
-        Porto p = new Porto(idPorto, nomePorto, paisPorto);
-        portos.adicionaPorto(p);
-      } catch (Exception e) {
-        System.setOut(standard);
-        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + " apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
-      }
-    }
-    portos.sort();
+  private void menu() {
+    System.out.println("Bem vindo(a) ao ACMEHandelsschifffahrtsgesellschaft!");
+    System.out.println("----------- O que deseja fazer? -----------");
+    System.out.println("| (1) Cadastrar novo dado                 |");
+    System.out.println("| (2) Consultar todas as cargas           |");
+    System.out.println("| (3) Alterar a situação de uma carga     |");
+    System.out.println("-------------------------------------------");
   }
 
-  public void readDistancias(ArrayList<String> linhas, String fileName) {
-    for (int i = 0; i < linhas.size(); i++) {
-      try {
-        String[] campos = linhas.get(i).split(";");
-        int idOrigem = Integer.parseInt(campos[0]);
-        int idDestino = Integer.parseInt(campos[1]);
-        double distancia = Double.parseDouble(campos[2].replaceAll(",", "."));
-        Distancia d = new Distancia(idOrigem, idDestino, distancia);
-        distancias.adicionaDistancias(d);
-      } catch (Exception e) {
-        System.setOut(standard);
-        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
-      }
-    }
-  }
-
-  public void readNavios(ArrayList<String> linhas, String fileName) {
-    for (int i = 0; i < linhas.size(); i++) {
-      try {
-        String[] campos = linhas.get(i).split(";");
-        String nome = campos[0];
-        double velocidade = Double.parseDouble(campos[1].replaceAll(",", "."));
-        double autonomia = Double.parseDouble(campos[2].replaceAll(",", "."));
-        double custoMilha = Double.parseDouble(campos[3].replaceAll(",", "."));
-        Navio n = new Navio(nome, velocidade, autonomia, custoMilha);
-        frota.adicionaNavio(n);
-      } catch (Exception e) {
-        System.setOut(standard);
-        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
-      }
-    }
-    frota.sort();
-  }
-
-  public void readClientes(ArrayList<String> linhas, String fileName) {
-    for (int i = 0; i < linhas.size(); i++) {
-      try {
-        String[] campos = linhas.get(i).split(";");
-        int codCli = Integer.parseInt(campos[0]);
-        String nomeCli = campos[1];
-        String emailCli = campos[2];
-        Cliente c = new Cliente(codCli, nomeCli, emailCli);
-        clientes.adicionaCliente(c);
-      } catch (Exception e) {
-        System.setOut(standard);
-        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
-      }
-    }
-    clientes.sort();
-  }
-
-  public void readTiposCargas(ArrayList<String> linhas, String fileName) {
-    for (int i = 0; i < linhas.size(); i++) {
-      try {
-        String[] campos = linhas.get(i).split(";");
-        int numero = Integer.parseInt(campos[0]);
-        String descricao = campos[1];
-        String categoria = campos[2];
-        if (categoria.equals("DURAVEL")) {
-          String setor = campos[3];
-          String material = campos[4];
-          double ipi = Double.parseDouble(campos[5].replaceAll(",", "."));
-          CargaDuravel c = new CargaDuravel(numero, descricao, setor, material, ipi);
-          tiposCargas.adicionaTipoCarga(c);
-        } else if (categoria.equals("PERECIVEL")) {
-          String origem = campos[3];
-          int tempoMaximo = Integer.parseInt(campos[4]);
-          CargaPerecivel c = new CargaPerecivel(numero, descricao, origem, tempoMaximo);
-          tiposCargas.adicionaTipoCarga(c);
-
-        }
-      } catch (Exception e) {
-        System.setOut(standard);
-        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
-      }
-    }
-    tiposCargas.sort();
-  }
-
-  public void readCargas(ArrayList<String> linhas, String fileName) {
-    for (int i = 0; i < linhas.size(); i++) {
-      try {
-        String[] campos = linhas.get(i).split(";");
-        int codigo = Integer.parseInt(campos[0]);
-        int codCli = Integer.parseInt(campos[1]);
-        int idOrigem = Integer.parseInt(campos[2]);
-        int idDestino = Integer.parseInt(campos[3]);
-        int peso = Integer.parseInt(campos[4]);
-        double valorDeclarado = Double.parseDouble(campos[5].replaceAll(",", "."));
-        int tempoMaximo = Integer.parseInt(campos[6]);
-        int idTipoCarga = Integer.parseInt(campos[7]);
-        String prioridade = campos[8];
-        String situacao = campos[9];
-
-        if (portos.checkPortoIdJaExiste(idOrigem) && portos.checkPortoIdJaExiste(idDestino)
-            && clientes.checkCodClienteJaExiste(codCli) && tiposCargas.checkTipoCargaJaExiste(idTipoCarga)) {
-          Carga c = new Carga(codigo, codCli, idOrigem, idDestino, peso, valorDeclarado, tempoMaximo, idTipoCarga,
-              prioridade, situacao);
-          cargas.adicionaCarga(c);
-        } else {
-          System.setOut(standard);
-          System.out.println("Linha " + (i + 2) + " do arquivo " + fileName
-              + "apresenta erros. Informações não existentes no cadastro da carga.");
-          System.setOut(streamSaida);
-        }
-
-      } catch (Exception e) {
-        System.setOut(standard);
-        System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
-      }
-    }
-    cargas.sort();
+  private void readFiles() {
+    entradaTerminal = new Scanner(System.in);
+    System.out.println("Insira o prefixo dos arquivos a serem lidos: ");
+    String filePrefix = entradaTerminal.nextLine();
+    CSVReader filesRead = new CSVReader();
+    filesRead.readFiles(filePrefix, portos, distancias, frota, clientes, tiposCargas, cargas);
   }
 
   public void cadastraNovoPorto() {
@@ -346,7 +182,8 @@ public class App {
 
         if (melhorNavio == null) {
           System.setOut(standard);
-          System.out.println("Não há navios que possam realizar o transporte da carga de id: " + c.getId() + ".");
+          System.out
+              .println("Não há navios que possam realizar o transporte da carga de id: " + c.getId() + " no momento.");
           System.setOut(streamSaida);
           continue;
         }
@@ -356,7 +193,9 @@ public class App {
             : melhorNavio.getCustoPorMilhaBasico());
 
         double valorFrete = (distancia * custoAjustado) + precoPeso + precoRegiao;
-        c.setSituacao("LOCADO");
+        c.alocarNavio(melhorNavio, valorFrete);
+        melhorNavio.setIsTransportingTrue();
+        melhorNavio.addCarga(c);
 
       } catch (Exception e) {
         System.setOut(standard);

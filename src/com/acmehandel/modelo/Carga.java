@@ -60,6 +60,12 @@ public class Carga {
     return situacao;
   }
 
+  public void alocarNavio(Navio n, double valorFrete) {
+    this.valorFrete = valorFrete;
+    navio = n;
+    setSituacao(Situacao.LOCADO.name());
+  }
+
   public boolean setSituacao(String sit) {
     try {
       if (situacao.equals(Situacao.CANCELADO.name())) {

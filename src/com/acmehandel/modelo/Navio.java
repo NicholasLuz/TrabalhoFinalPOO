@@ -1,4 +1,5 @@
 package src.com.acmehandel.modelo;
+
 import java.util.ArrayList;
 
 public class Navio {
@@ -42,7 +43,11 @@ public class Navio {
     return isTransporting;
   }
 
-  public void setIsTransporting() {
-    isTransporting = !isTransporting;
+  public void setIsTransportingTrue() {
+    isTransporting = true;
+  }
+
+  public void setIsTransportingFalse() {
+    isTransporting = false;
   }
 }
