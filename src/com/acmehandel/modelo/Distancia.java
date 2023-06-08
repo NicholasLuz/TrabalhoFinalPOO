@@ -1,3 +1,5 @@
+package src.com.acmehandel.modelo;
+
 public class Distancia {
   private int idOrigem;
   private int idDestino;

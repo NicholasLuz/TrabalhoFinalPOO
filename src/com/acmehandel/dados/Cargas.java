@@ -1,6 +1,10 @@
+package src.com.acmehandel.dados;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import src.com.acmehandel.modelo.Carga;
+import src.com.acmehandel.modelo.Situacao;
 
 public class Cargas {
   private ArrayList<Carga> cargas;

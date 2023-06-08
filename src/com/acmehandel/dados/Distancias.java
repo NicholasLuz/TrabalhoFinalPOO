@@ -1,4 +1,7 @@
+package src.com.acmehandel.dados;
+
 import java.util.ArrayList;
+import src.com.acmehandel.modelo.Distancia;
 
 public class Distancias {
   private ArrayList<Distancia> distancias;

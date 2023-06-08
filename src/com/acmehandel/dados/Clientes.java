@@ -1,4 +1,7 @@
+package src.com.acmehandel.dados;
+
 import java.util.ArrayList;
+import src.com.acmehandel.modelo.Cliente;
 
 public class Clientes {
   private ArrayList<Cliente> clientes;
@@ -26,8 +29,7 @@ public class Clientes {
   }
 
   public boolean adicionaCliente(Cliente c) {
-    if (checkEmailClienteJaExiste(c.getEmail()) || checkCodClienteJaExiste(c.getCod()))
-    {
+    if (checkEmailClienteJaExiste(c.getEmail()) || checkCodClienteJaExiste(c.getCod())) {
       return false;
     }
     return clientes.add(c);

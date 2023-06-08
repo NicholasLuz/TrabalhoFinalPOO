@@ -1,14 +1,10 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+package src.app;
 
-//testando tudo
+import java.io.*;
+import java.util.*;
+import src.com.acmehandel.dados.*;
+import src.com.acmehandel.modelo.*;
+
 public class App {
   private Frota frota = new Frota();
   private Cargas cargas = new Cargas();
@@ -24,11 +20,13 @@ public class App {
 
   public App() {
     entradaTerminal = new Scanner(System.in);
-    System.out.println("Insira o prefixo dos arquivos a serem lidos: "); //depois tem que mudar de EXEMPLOS pra porto/distancias/navio
+    System.out.println("Insira o prefixo dos arquivos a serem lidos: "); // depois tem que mudar de EXEMPLOS pra
+                                                                         // porto/distancias/navio
     String filePrefix = entradaTerminal.nextLine();
     try {
       for (String file : nomesArquivos) {
-        BufferedReader streamEntrada = new BufferedReader(new FileReader(filePrefix + "-" + file + ".csv"));
+        BufferedReader streamEntrada = new BufferedReader(
+            new FileReader("resources/csv/" + filePrefix + "-" + file + ".csv"));
         entrada = new Scanner(streamEntrada); // Usa como entrada um arquivo
         entrada.useLocale(Locale.ENGLISH);
         ArrayList<String> linhas = new ArrayList<>();
@@ -58,7 +56,7 @@ public class App {
           default:
             break;
         }
-        streamSaida = new PrintStream(new File("resultado.csv"));
+        streamSaida = new PrintStream(new File("output/resultado.csv"));
         System.setOut(streamSaida); // Usa como saida um arquivo
       }
     } catch (Exception e) {
@@ -229,42 +227,46 @@ public class App {
         teclado.nextLine();
 
         Porto p = new Porto(id, nome, pais);
-        if (!portos.adicionaPorto(p)){
+        if (!portos.adicionaPorto(p)) {
           System.out.println("Ocorreu um erro: id do porto ja cadastrado");
         }
 
         System.out.println("Para sair, digite \"0\": ");
         sair = teclado.nextInt();
       } while (sair != 0);
-    }catch (IllegalStateException e){e.getMessage();}
+    } catch (IllegalStateException e) {
+      e.getMessage();
+    }
   }
 
   public void cadastraNovoNavio() {
     int sair = 1;
-    try{
-    do {
-      System.out.println("Digite o nome do navio (nomes tem que ser unicos):");
-      String nome = teclado.nextLine();
-      teclado.nextLine();
-      if (frota.checkNomeNavioJaExiste(nome)){
-        throw new IllegalArgumentException("Nome do navio ja cadastrado");
-      }
-      System.out.println("Digite a velocidade do navio:");
-      double velocidade = teclado.nextDouble();
-      System.out.println("Digite a autonomia do navio:");
-      double autonomia = teclado.nextDouble();
-      System.out.println("Digite o custo por milha basico do navio:");
-      double custoPorMilha = teclado.nextDouble();
+    try {
+      do {
+        System.out.println("Digite o nome do navio (nomes tem que ser unicos):");
+        String nome = teclado.nextLine();
+        teclado.nextLine();
+        if (frota.checkNomeNavioJaExiste(nome)) {
+          throw new IllegalArgumentException("Nome do navio ja cadastrado");
+        }
+        System.out.println("Digite a velocidade do navio:");
+        double velocidade = teclado.nextDouble();
+        System.out.println("Digite a autonomia do navio:");
+        double autonomia = teclado.nextDouble();
+        System.out.println("Digite o custo por milha basico do navio:");
+        double custoPorMilha = teclado.nextDouble();
 
-      Navio n = new Navio(nome,velocidade,autonomia,custoPorMilha);
-      if (!frota.adicionaNavio(n)){
-        System.out.println("Ocorreu um erro: Ja existe navio com este nome");
-      }
+        Navio n = new Navio(nome, velocidade, autonomia, custoPorMilha);
+        if (!frota.adicionaNavio(n)) {
+          System.out.println("Ocorreu um erro: Ja existe navio com este nome");
+        }
 
-      System.out.println("Para sair, digite \"0\": ");
-      sair = teclado.nextInt();
-    }while (sair != 0);
-  }catch (IllegalStateException e){e.getMessage();}
+        System.out.println("Para sair, digite \"0\": ");
+        sair = teclado.nextInt();
+      } while (sair != 0);
+    } catch (IllegalStateException e) {
+      e.getMessage();
+    }
   }
 
   public void cadastraNovoCliente() {
@@ -287,27 +289,28 @@ public class App {
         }
 
         Cliente c = new Cliente(codigo, nome, email);
-        if (!clientes.adicionaCliente(c)){
+        if (!clientes.adicionaCliente(c)) {
           System.out.println("Ocorreu um erro: codigo ou email ja cadastrados.");
         }
 
         System.out.println("Para sair, digite \"0\": ");
         sair = teclado.nextInt();
       } while (sair != 0);
-    }catch (IllegalStateException e){e.getMessage();}
+    } catch (IllegalStateException e) {
+      e.getMessage();
+    }
   }
 
   public void consultarCargas() {
     cargas.mostrarCargas();
   }
 
-  public void alterarSituacaoCarga(int identificador, String situacao){
+  public void alterarSituacaoCarga(int identificador, String situacao) {
     Carga c = cargas.getCargaId(identificador);
-    if ( c != null){
+    if (c != null) {
       c.toString();
       c.setSituacao(situacao);
-    }
-    else{
+    } else {
       System.out.println("NAO EXISTEM CARGAS COM ESTE IDENTIFICADOR");
     }
   }

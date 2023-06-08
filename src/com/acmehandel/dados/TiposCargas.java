@@ -1,4 +1,9 @@
+package src.com.acmehandel.dados;
+
 import java.util.ArrayList;
+import src.com.acmehandel.modelo.CargaDuravel;
+import src.com.acmehandel.modelo.CargaPerecivel;
+import src.com.acmehandel.modelo.TipoCarga;
 
 public class TiposCargas {
   private ArrayList<TipoCarga> tiposCargas;

@@ -1,3 +1,4 @@
+package src.com.acmehandel.modelo;
 import java.util.ArrayList;
 
 public class Navio {

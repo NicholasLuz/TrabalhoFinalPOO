@@ -1,3 +1,6 @@
+package src.com.acmehandel.modelo;
+
+
 public class CargaDuravel extends TipoCarga {
   private String setor;
   private String materialPrincipal;

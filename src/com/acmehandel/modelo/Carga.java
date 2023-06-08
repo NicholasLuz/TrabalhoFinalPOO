@@ -1,6 +1,8 @@
+package src.com.acmehandel.modelo;
+
 public class Carga {
   private int identificador, idCliente, idPortoOrigem, idPortoDestino, peso, tempoMaximo, idTipoCarga;
-  private double valorDeclarado, valorFrete, freteSemDist;
+  private double valorDeclarado, valorFrete;
   private String prioridade, situacao;
   private Navio navio;
 
@@ -65,18 +67,19 @@ public class Carga {
       } else if (situacao.equals(Situacao.FINALIZADO.name())) {
         throw new IllegalArgumentException("NAO FOI POSSIVEL ALTERAR SITUACAO DO PEDIDO, PEDIDO JA FINALIZADO");
       }
-    }catch(Exception e){
+    } catch (Exception e) {
       System.out.println(e.getMessage());
     }
-    try{
-    for (Situacao s : Situacao.values()) {
-      if (sit.equals(s.name())) {
-        situacao = sit;
-        return true;
+    try {
+      for (Situacao s : Situacao.values()) {
+        if (sit.equals(s.name())) {
+          situacao = sit;
+          return true;
+        }
       }
+    } catch (Exception e) {
+      System.out.println("SITUACAO INSERIDA INVALIDA");
     }
-    }catch (Exception e){
-      System.out.println("SITUACAO INSERIDA INVALIDA");}
     return false;
   }
 

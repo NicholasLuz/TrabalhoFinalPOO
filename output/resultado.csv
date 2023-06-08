@@ -1,0 +1,29 @@
+Id: 11;Nome: Rio Grande;País: Brasil
+Id: 22;Nome: Santos;País: Brasil
+Id: 33;Nome: Lisboa;País: Portugal
+IdOrigem: 11;IdDestino: 22;Distancia: 680.0
+IdOrigem: 22;IdDestino: 33;Distancia: 5500.0
+IdOrigem: 11;IdDestino: 33;Distancia: 6200.0
+Nome: Aquaman;Velocidade: 20.0;Autonomia: 6500.0;CustoMilhaBasico: 25.0
+Nome: Netuno;Velocidade: 40.0;Autonomia: 5500.0;CustoMilhaBasico: 50.0
+Nome: Poseidon;Velocidade: 10.0;Autonomia: 10000.0;CustoMilhaBasico: 10.0
+Código: 1111;Nome: Maria da Silva;Email: maria@email.com
+Código: 2222;Nome: Tires Inc.;Email: pedro@mail.com.br
+Numero: 11111;Descricao: Carne suina
+Numero: 22222;Descricao: Pneus de automovel
+--------------------------
+Id: 111
+Porto de Origem: 11
+Porto de Destino: 22
+Cliente: 1111
+Tipo de Carga: 11111
+Situação: PENDENTE
+Não há navios designados para esta carga.
+--------------------------
+Id: 222
+Porto de Origem: 22
+Porto de Destino: 33
+Cliente: 2222
+Tipo de Carga: 22222
+Situação: PENDENTE
+Não há navios designados para esta carga.

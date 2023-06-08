@@ -1,4 +1,8 @@
+package src.com.acmehandel.dados;
+
 import java.util.ArrayList;
+import src.com.acmehandel.modelo.Navio;
+import src.com.acmehandel.modelo.Prioridade;
 
 public class Frota {
   private ArrayList<Navio> frota;

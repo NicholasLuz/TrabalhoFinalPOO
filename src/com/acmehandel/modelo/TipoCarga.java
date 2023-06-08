@@ -1,3 +1,5 @@
+package src.com.acmehandel.modelo;
+
 public class TipoCarga {
   private int numero;
   private String descricao;

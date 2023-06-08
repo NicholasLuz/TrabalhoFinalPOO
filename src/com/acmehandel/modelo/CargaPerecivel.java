@@ -1,3 +1,5 @@
+package src.com.acmehandel.modelo;
+
 public class CargaPerecivel extends TipoCarga {
   private String origem;
   private int tempoMaximoValidade;

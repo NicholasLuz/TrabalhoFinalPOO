@@ -1,3 +1,5 @@
+package src.com.acmehandel.modelo;
+
 public class Cliente {
   private int cod;
   private String nome;
