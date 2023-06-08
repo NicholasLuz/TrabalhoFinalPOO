@@ -134,13 +134,13 @@ public class CSVReader {
         int numero = Integer.parseInt(campos[0]);
         String descricao = campos[1];
         String categoria = campos[2];
-        if (categoria.equals("DURAVEL")) {
+        if (categoria.equals(CategoriaCarga.DURAVEL.name())) {
           String setor = campos[3];
           String material = campos[4];
           double ipi = Double.parseDouble(campos[5].replaceAll(",", "."));
           CargaDuravel c = new CargaDuravel(numero, descricao, setor, material, ipi);
           tiposCargas.adicionaTipoCarga(c);
-        } else if (categoria.equals("PERECIVEL")) {
+        } else if (categoria.equals(CategoriaCarga.PERECIVEL.name())) {
           String origem = campos[3];
           int tempoMaximo = Integer.parseInt(campos[4]);
           CargaPerecivel c = new CargaPerecivel(numero, descricao, origem, tempoMaximo);

@@ -19,23 +19,137 @@ public class App {
   private PrintStream streamSaida;
 
   public void executar() {
-    menu();
-    readFiles();
-    portos.mostrarPortos();
-    distancias.mostrarDistancias();
-    frota.mostrarNavios();
-    clientes.mostrarClientes();
-    tiposCargas.mostrarTiposCargas();
-    consultarCargas();
+    while (true) {
+      menuGeral();
+      int resposta = escolherOpcaoMenuGeral();
+      tratarRespostaMenuGeral(resposta);
+    }
+    // readFiles();
+    // portos.mostrarPortos();
+    // distancias.mostrarDistancias();
+    // frota.mostrarNavios();
+    // clientes.mostrarClientes();
+    // tiposCargas.mostrarTiposCargas();
   }
 
-  private void menu() {
+  private void menuGeral() {
     System.out.println("Bem vindo(a) ao ACMEHandelsschifffahrtsgesellschaft!");
     System.out.println("----------- O que deseja fazer? -----------");
     System.out.println("| (1) Cadastrar novo dado                 |");
     System.out.println("| (2) Consultar todas as cargas           |");
     System.out.println("| (3) Alterar a situação de uma carga     |");
+    System.out.println("| (4) Fretar cargas                       |");
+    System.out.println("| (5) Salvar dados                        |");
+    System.out.println("| (6) Carregar dados de arquivo externo   |");
+    System.out.println("| (7) Finalizar sistema                   |");
     System.out.println("-------------------------------------------");
+  }
+
+  public int escolherOpcaoMenuGeral() {
+    boolean continuar = false;
+    int resposta = 0;
+    while (!continuar) {
+      try {
+        resposta = Integer.parseInt(teclado.nextLine());
+
+        if (resposta < 0 || resposta > 7) {
+          throw new InputMismatchException();
+        }
+        continuar = true;
+      } catch (InputMismatchException | NumberFormatException e) {
+        System.out.println("Valor inválido, insira valor da lista.");
+      }
+    }
+    return resposta;
+  }
+
+  public void tratarRespostaMenuGeral(int resposta) {
+    switch (resposta) {
+      case 1:
+        menuAdicionarDado();
+        int resp = escolherOpcaoMenuAdicionarDado();
+        tratarRespostaMenuAdicionarDado(resp);
+        break;
+      case 2:
+        consultarCargas();
+        break;
+      case 3:
+        // Criar metodo intermediario para ler codigo carga, mostrar carga especifica e
+        // solicitar nova situacao, se estiver finalizado, nao pode alterar e da erro.
+        break;
+      case 4:
+        fretarCargas();
+        break;
+      case 5:
+        // Criar metodo para salvar dados
+        break;
+      case 6:
+        readFiles();
+        break;
+      case 7:
+        System.out.println("Encerrando o programa");
+        System.exit(0);
+        break;
+      default:
+        System.out.println("Erro inesperado aconteceu. Encerrando o programa.");
+        System.exit(0);
+    }
+  }
+
+  private void menuAdicionarDado() {
+    System.out.println("Você selecionou adicionar novo dado.");
+    System.out.println("--- Qual das opções deseja adicionar? ---");
+    System.out.println("| (1) Porto                             |");
+    System.out.println("| (2) Navio                             |");
+    System.out.println("| (3) Cliente                           |");
+    System.out.println("| (4) Tipo de Carga                     |");
+    System.out.println("| (5) Carga                             |");
+    System.out.println("| (6) Voltar ao menu anterior           |");
+    System.out.println("| (0) Encerrar o programa               |");
+    System.out.println("-----------------------------------------");
+  }
+
+  public int escolherOpcaoMenuAdicionarDado() {
+    boolean continuar = false;
+    int resposta = 0;
+    while (!continuar) {
+      try {
+        resposta = Integer.parseInt(teclado.nextLine());
+
+        if (resposta < 0 || resposta > 6) {
+          throw new InputMismatchException();
+        }
+        continuar = true;
+      } catch (InputMismatchException | NumberFormatException e) {
+        System.out.println("Valor inválido, insira valor da lista.");
+      }
+    }
+    return resposta;
+  }
+
+  public void tratarRespostaMenuAdicionarDado(int resposta) {
+    switch (resposta) {
+      case 1:
+        cadastraNovoPorto();
+        break;
+      case 2:
+        cadastraNovoNavio();
+        break;
+      case 3:
+        cadastraNovoCliente();
+        break;
+      case 4:
+        // cadastrar tipo de carga
+        break;
+      case 5:
+        // cadastrar carga
+        break;
+      case 6:
+        break;
+      default:
+        System.out.println("Erro inesperado aconteceu. Encerrando o programa.");
+        System.exit(0);
+    }
   }
 
   private void readFiles() {
