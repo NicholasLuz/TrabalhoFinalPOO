@@ -218,6 +218,95 @@ public class App {
       e.getMessage();
     }
   }
+  public void cadastraNovoTipoCarga() {
+    int sair = 1;
+    try {
+      do {
+        System.out.println("Digite o codigo do tipo de carga (codigo tem que ser unico):");
+        int codigo = teclado.nextInt();
+        if (tiposCargas.checkTipoCargaJaExiste(codigo)) {
+          throw new IllegalArgumentException("Codigo do tipo de carga ja cadastrado");
+        }
+        System.out.println("Digite a descricao do tipo de carga:");
+        String descricao = teclado.nextLine();
+        teclado.nextLine();
+        System.out.println("Digite a categoria (DURAVEL ou PERECIVEL):");
+        String categoria = teclado.nextLine();
+        teclado.nextLine();
+        try{CategoriaCarga.valueOf(categoria);
+        }catch (IllegalArgumentException e){
+          throw new IllegalArgumentException("Categoria deve ser DURAVEL ou PERECIVEL!!");
+        }
+
+        switch (CategoriaCarga.valueOf(categoria)) {
+          case DURAVEL:
+            System.out.println("Digite o setor:");
+            String setor = teclado.nextLine();
+            teclado.nextLine();
+            System.out.println("Digite o material principal:");
+            String materialPrincipal = teclado.nextLine();
+            teclado.nextLine();
+            System.out.println("Digite o percentual do IPI:");
+            double percentualIPI = teclado.nextDouble();
+            CargaDuravel cargaD = new CargaDuravel(codigo, descricao, setor, materialPrincipal, percentualIPI);
+            break;
+          case PERECIVEL:
+            System.out.println("Digite a origem:");
+            String origem = teclado.nextLine();
+            teclado.nextLine();
+            System.out.println("Digite o tempo maximo de validade:");
+            int validade = teclado.nextInt();
+            CargaPerecivel cargaP = new CargaPerecivel(codigo, descricao, origem, validade);
+            break;
+        }
+          System.out.println("Para sair, digite \"0\": ");
+          sair = teclado.nextInt();
+      } while (sair != 0);
+    }catch (IllegalArgumentException i) {
+        i.getMessage();
+    }
+  }
+
+  public void cadastraNovaCarga() {
+    int sair = 1;
+    try {
+      do {
+        System.out.println("Digite o codigo da carga (codigo tem que ser unico):");
+        int codigo = teclado.nextInt();
+        if (cargas.checkCargaIdJaExiste(codigo)){
+          throw new IllegalArgumentException("codigo ja cadastrado");
+        }
+        System.out.println("Digite o id do cliente:");
+        int id = teclado.nextInt();
+        System.out.println("Digite o id do porto de origem:");
+        int idOrigem = teclado.nextInt();
+        System.out.println("Digite o id do porto de destino:");
+        int idDestino = teclado.nextInt();
+        System.out.println("Digite o peso:");
+        int peso = teclado.nextInt();
+        System.out.println("Digite o valor declarado:");
+        double valorDeclarado = teclado.nextDouble();
+        System.out.println("Digite o tempo maximo:");
+        int tempoMaximo = teclado.nextInt();
+        System.out.println("Digite o id do tipo de carga:");
+        int idTipoCarga = teclado.nextInt();
+        System.out.println("Digite a prioridade da entrega (RAPIDO ou BARATO):");
+        String prioridade = teclado.nextLine();
+        try{Prioridade.valueOf(prioridade);
+        }catch (IllegalArgumentException e){
+          throw new IllegalArgumentException("Prioridade deve ser RAPIDO ou BARATO!!");
+        }
+        teclado.nextLine();
+
+        Carga carga = new Carga(codigo,id,idOrigem,idDestino,peso,valorDeclarado,tempoMaximo,idTipoCarga,prioridade,"PENDENTE");
+
+        System.out.println("Para sair, digite \"0\": ");
+        sair = teclado.nextInt();
+      } while (sair != 0);
+    } catch (IllegalStateException e) {
+      e.getMessage();
+    }
+  }
 
   public void cadastraNovoCliente() {
     int sair = 1;

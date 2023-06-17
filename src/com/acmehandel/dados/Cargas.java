@@ -13,7 +13,7 @@ public class Cargas {
     this.cargas = new ArrayList<Carga>();
   }
 
-  private boolean checkCargaIdJaExiste(int id) {
+  public boolean checkCargaIdJaExiste(int id) {
     for (Carga c : cargas) {
       if (c.getId() == id) {
         return true;
