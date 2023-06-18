@@ -1,41 +1,52 @@
+package InterfaceGrafica;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class FormularioCliente extends JFrame {
-  // Componentes principais
   private JTextField codCliente;
   private JTextField nomeCliente;
   private JTextField emailCliente;
-  private JButton botao;
+  private JButton botaoCadastrar, botaoMostrarCadastrados, botaoSair, botaoLimpar;
   private JLabel mensagem;
 
   public FormularioCliente() {
     super();
-
-    JLabel formTitle = new JLabel("Digite as informações do cliente.");
-    formTitle.setFont(new Font("Tahoma", Font.PLAIN, 20));
-
+    JPanel janelaPrincipal = new JPanel();
+    janelaPrincipal.setLayout(new BorderLayout());
+    setTitle("Cadastro de Clientes");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setSize(650, 300);
     GridLayout gridCampos = new GridLayout(4, 2);
-    JPanel painelCampos = new JPanel(gridCampos);
-    JLabel codClienteLabel = new JLabel("código");
-    JLabel nomeClienteLabel = new JLabel("nome");
-    JLabel emailClienteLabel = new JLabel("e-mail");
-    codCliente = new JTextField();
-    nomeCliente = new JTextField();
-    emailCliente = new JTextField();
-    painelCampos.add(codClienteLabel);
-    painelCampos.add(codCliente);
-    painelCampos.add(nomeClienteLabel);
-    painelCampos.add(nomeCliente);
-    painelCampos.add(emailClienteLabel);
-    painelCampos.add(emailCliente);
 
-    botao = new JButton("Enviar");
+    JPanel painel = new JPanel();
+    painel.setLayout(gridCampos);
+
+    JLabel stringCadastroDeClientes = new JLabel("Cadastro de Clientes: ");
+    stringCadastroDeClientes.setFont(new Font("Arial", Font.BOLD, 14));
+    painel.add(stringCadastroDeClientes);
+    painel.add(new JLabel());
+
+    painel.add(new JLabel("Codigo do cliente:"));
+    codCliente = new JTextField();
+    painel.add(codCliente);
+
+    painel.add(new JLabel("Nome do cliente:"));
+    nomeCliente = new JTextField();
+    painel.add(nomeCliente);
+
+    painel.add(new JLabel("E-mail:"));
+    emailCliente = new JTextField();
+    painel.add(emailCliente);
+
+    janelaPrincipal.add(painel, BorderLayout.CENTER);
+
+    JPanel botaoPainel = new JPanel();
+    botaoPainel.setLayout(new FlowLayout());
+
+    botaoCadastrar = new JButton("Cadastrar");
     mensagem = new JLabel();
 
-    // Tratamento de evento do botao
+    /* Tratamento de evento do botao
     botao.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -45,25 +56,44 @@ public class FormularioCliente extends JFrame {
             "Autonomia: " + emailCliente.getText());
       }
     });
+    */
 
-    GridLayout grid = new GridLayout(4, 1);
-    JPanel painel = new JPanel(grid);
-    painel.add(formTitle);
-    painel.add(painelCampos);
-    FlowLayout botaoLayout = new FlowLayout(FlowLayout.LEFT);
-    JPanel botaoPainel = new JPanel(botaoLayout);
-    botaoPainel.add(botao);
-    painel.add(botaoPainel);
-    painel.add(mensagem);
+    FlowLayout botaoLayout = new FlowLayout();
+    botaoPainel = new JPanel(botaoLayout);
 
-    this.setTitle("Formulario - Swing");
-    this.add(painel);
-    this.setSize(1200, 600);
-    this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    this.setVisible(true);
-  }
+    botaoCadastrar = new JButton("Cadastrar");
+    botaoCadastrar.setBackground(Color.BLUE);
+    botaoCadastrar.setForeground(Color.WHITE);
+    //tratar eventos botaoCadastrar.addActionListener
+    botaoPainel.add(botaoCadastrar);
 
-  public static void main(String[] args) {
-    FormularioCliente janela = new FormularioCliente();
+    botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
+    botaoMostrarCadastrados.setBackground(Color.BLUE);
+    botaoMostrarCadastrados.setForeground(Color.WHITE);
+    botaoPainel.add(botaoMostrarCadastrados);
+
+    botaoLimpar = new JButton("Limpar");
+    botaoLimpar.setBackground(Color.BLUE);
+    botaoLimpar.setForeground(Color.YELLOW);
+    botaoPainel.add(botaoLimpar);
+
+    botaoSair = new JButton("Sair");
+    botaoSair.setBackground(Color.BLACK);
+    botaoSair.setForeground(Color.WHITE);
+    botaoPainel.add(botaoSair);
+
+    janelaPrincipal.add(botaoPainel, BorderLayout.SOUTH);
+
+    add(janelaPrincipal);
+
+    mensagem = new JLabel();
+    mensagem.setHorizontalAlignment(JLabel.CENTER);
+    mensagem.setForeground(Color.BLUE);
+    mensagem.setFont(new Font("Arial", Font.BOLD, 13));
+    mensagem.setVisible(false);
+    add(mensagem, BorderLayout.NORTH);
+    setVisible(true);
+
   }
 }
+
