@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug (Launch)",
+      "request": "launch",
+      "mainClass": "src.app.Main",
+      "vmArgs": "-cp ${workspaceFolder}/lib/gson-2.10.1.jar"
+    }
+  ]
+}

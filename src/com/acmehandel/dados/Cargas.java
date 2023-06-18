@@ -1,4 +1,5 @@
 package src.com.acmehandel.dados;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,17 +23,16 @@ public class Cargas {
     return false;
   }
 
-  public Carga getCargaId(int id){
-    if (checkCargaIdJaExiste(id)){
+  public Carga getCargaId(int id) {
+    if (checkCargaIdJaExiste(id)) {
       for (Carga c : cargas) {
         if (c.getId() == id) {
-         return c;
+          return c;
         }
       }
     }
     return null;
   }
-
 
   public boolean adicionaCarga(Carga c) {
     if (checkCargaIdJaExiste(c.getId()))

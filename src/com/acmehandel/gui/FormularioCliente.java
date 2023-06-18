@@ -1,4 +1,5 @@
-package InterfaceGrafica;
+package src.com.acmehandel.gui;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -46,17 +47,19 @@ public class FormularioCliente extends JFrame {
     botaoCadastrar = new JButton("Cadastrar");
     mensagem = new JLabel();
 
-    /* Tratamento de evento do botao
-    botao.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        mensagem.setForeground(Color.RED);
-        mensagem.setText("Botão 'Enviar' pressionado: " +
-            "Código: " + codCliente.getText() + ", Nome: " + nomeCliente.getText() +
-            "Autonomia: " + emailCliente.getText());
-      }
-    });
-    */
+    /*
+     * Tratamento de evento do botao
+     * botao.addActionListener(new ActionListener() {
+     * 
+     * @Override
+     * public void actionPerformed(ActionEvent e) {
+     * mensagem.setForeground(Color.RED);
+     * mensagem.setText("Botão 'Enviar' pressionado: " +
+     * "Código: " + codCliente.getText() + ", Nome: " + nomeCliente.getText() +
+     * "Autonomia: " + emailCliente.getText());
+     * }
+     * });
+     */
 
     FlowLayout botaoLayout = new FlowLayout();
     botaoPainel = new JPanel(botaoLayout);
@@ -64,7 +67,7 @@ public class FormularioCliente extends JFrame {
     botaoCadastrar = new JButton("Cadastrar");
     botaoCadastrar.setBackground(Color.BLUE);
     botaoCadastrar.setForeground(Color.WHITE);
-    //tratar eventos botaoCadastrar.addActionListener
+    // tratar eventos botaoCadastrar.addActionListener
     botaoPainel.add(botaoCadastrar);
 
     botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
@@ -96,4 +99,3 @@ public class FormularioCliente extends JFrame {
 
   }
 }
-

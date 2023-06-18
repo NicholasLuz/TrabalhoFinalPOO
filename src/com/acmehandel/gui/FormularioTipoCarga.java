@@ -1,4 +1,5 @@
-package InterfaceGrafica;
+package src.com.acmehandel.gui;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,7 +8,7 @@ import java.awt.event.ActionListener;
 public class FormularioTipoCarga extends JFrame {
     private JTextField numero;
     private JTextField descricao;
-    private JRadioButton duravel,perecivel;
+    private JRadioButton duravel, perecivel;
     private JTextField origem;
     private JTextField tempoMaximo;
     private JTextField setor;
@@ -43,7 +44,7 @@ public class FormularioTipoCarga extends JFrame {
 
         painel.add(new JLabel("Selecione o tipo de entrega (prioridade):"));
 
-        JPanel painelCheck = new JPanel(new GridLayout(1,2));
+        JPanel painelCheck = new JPanel(new GridLayout(1, 2));
         duravel = new JRadioButton("Duravel");
         perecivel = new JRadioButton("Perecivel");
 
@@ -68,7 +69,6 @@ public class FormularioTipoCarga extends JFrame {
         painel.add(tempoMaximo);
         tempoMaximoLabel.setVisible(false);
         tempoMaximo.setVisible(false);
-
 
         JLabel setorLabel = new JLabel("Setor:");
         painel.add(setorLabel);
@@ -135,17 +135,19 @@ public class FormularioTipoCarga extends JFrame {
         botaoCadastrar = new JButton("Cadastrar");
         mensagem = new JLabel();
 
-    /* Tratamento de evento do botao
-    botao.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        mensagem.setForeground(Color.RED);
-        mensagem.setText("Botão 'Enviar' pressionado: " +
-            "Código: " + codCliente.getText() + ", Nome: " + nomeCliente.getText() +
-            "Autonomia: " + emailCliente.getText());
-      }
-    });
-    */
+        /*
+         * Tratamento de evento do botao
+         * botao.addActionListener(new ActionListener() {
+         * 
+         * @Override
+         * public void actionPerformed(ActionEvent e) {
+         * mensagem.setForeground(Color.RED);
+         * mensagem.setText("Botão 'Enviar' pressionado: " +
+         * "Código: " + codCliente.getText() + ", Nome: " + nomeCliente.getText() +
+         * "Autonomia: " + emailCliente.getText());
+         * }
+         * });
+         */
 
         FlowLayout botaoLayout = new FlowLayout();
         botaoPainel = new JPanel(botaoLayout);
@@ -153,7 +155,7 @@ public class FormularioTipoCarga extends JFrame {
         botaoCadastrar = new JButton("Cadastrar");
         botaoCadastrar.setBackground(Color.BLUE);
         botaoCadastrar.setForeground(Color.WHITE);
-        //tratar eventos botaoCadastrar.addActionListener
+        // tratar eventos botaoCadastrar.addActionListener
         botaoPainel.add(botaoCadastrar);
 
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");

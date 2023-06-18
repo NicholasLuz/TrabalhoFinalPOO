@@ -60,6 +60,14 @@ public class Carga {
     return situacao;
   }
 
+  public double getValorFrete() {
+    return valorFrete;
+  }
+
+  public Navio getNavio() {
+    return navio;
+  }
+
   public void alocarNavio(Navio n, double valorFrete) {
     this.valorFrete = valorFrete;
     navio = n;
@@ -73,7 +81,7 @@ public class Carga {
       } else if (situacao.equals(Situacao.FINALIZADO.name())) {
         throw new IllegalArgumentException("NAO FOI POSSIVEL ALTERAR SITUACAO DO PEDIDO, PEDIDO JA FINALIZADO");
       }
-    } catch (Exception e) {
+    } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
     try {

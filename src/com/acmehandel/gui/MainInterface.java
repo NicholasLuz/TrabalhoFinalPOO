@@ -1,4 +1,4 @@
-package InterfaceGrafica;
+package src.com.acmehandel.gui;
 
 public class MainInterface {
     public static void main(String[] args) {
@@ -9,6 +9,3 @@ public class MainInterface {
         FormularioNavio janela5 = new FormularioNavio();
     }
 }
-
-
-

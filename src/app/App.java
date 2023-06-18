@@ -5,6 +5,7 @@ import java.util.*;
 import src.com.acmehandel.dados.*;
 import src.com.acmehandel.modelo.*;
 import src.com.acmehandel.util.CSVReader;
+import com.google.gson.Gson;
 
 public class App {
   private Frota frota = new Frota();
@@ -15,21 +16,15 @@ public class App {
   private TiposCargas tiposCargas = new TiposCargas();
   private Scanner teclado = new Scanner(System.in);
   private Scanner entradaTerminal; // Atributo para entrada de dados
-  private PrintStream standard = System.out; // variavel para trocar scanner para terminal
-  private PrintStream streamSaida;
+  private PrintStream standard = System.out;
 
   public void executar() {
+    System.setOut(standard);
     while (true) {
       menuGeral();
       int resposta = escolherOpcaoMenuGeral();
       tratarRespostaMenuGeral(resposta);
     }
-    // readFiles();
-    // portos.mostrarPortos();
-    // distancias.mostrarDistancias();
-    // frota.mostrarNavios();
-    // clientes.mostrarClientes();
-    // tiposCargas.mostrarTiposCargas();
   }
 
   private void menuGeral() {
@@ -41,7 +36,7 @@ public class App {
     System.out.println("| (4) Fretar cargas                       |");
     System.out.println("| (5) Salvar dados                        |");
     System.out.println("| (6) Carregar dados de arquivo externo   |");
-    System.out.println("| (7) Finalizar sistema                   |");
+    System.out.println("| (0) Finalizar sistema                   |");
     System.out.println("-------------------------------------------");
   }
 
@@ -52,7 +47,7 @@ public class App {
       try {
         resposta = Integer.parseInt(teclado.nextLine());
 
-        if (resposta < 0 || resposta > 7) {
+        if (resposta < 0 || resposta > 6) {
           throw new InputMismatchException();
         }
         continuar = true;
@@ -74,19 +69,18 @@ public class App {
         consultarCargas();
         break;
       case 3:
-        // Criar metodo intermediario para ler codigo carga, mostrar carga especifica e
-        // solicitar nova situacao, se estiver finalizado, nao pode alterar e da erro.
+        alterarCarga();
         break;
       case 4:
         fretarCargas();
         break;
       case 5:
-        // Criar metodo para salvar dados
+        salvarDados();
         break;
       case 6:
         readFiles();
         break;
-      case 7:
+      case 0:
         System.out.println("Encerrando o programa");
         System.exit(0);
         break;
@@ -145,6 +139,10 @@ public class App {
         // cadastrar carga
         break;
       case 6:
+        break;
+      case 0:
+        System.out.println("Encerrando o programa");
+        System.exit(0);
         break;
       default:
         System.out.println("Erro inesperado aconteceu. Encerrando o programa.");
@@ -218,6 +216,7 @@ public class App {
       e.getMessage();
     }
   }
+
   public void cadastraNovoTipoCarga() {
     int sair = 1;
     try {
@@ -233,8 +232,9 @@ public class App {
         System.out.println("Digite a categoria (DURAVEL ou PERECIVEL):");
         String categoria = teclado.nextLine();
         teclado.nextLine();
-        try{CategoriaCarga.valueOf(categoria);
-        }catch (IllegalArgumentException e){
+        try {
+          CategoriaCarga.valueOf(categoria);
+        } catch (IllegalArgumentException e) {
           throw new IllegalArgumentException("Categoria deve ser DURAVEL ou PERECIVEL!!");
         }
 
@@ -259,11 +259,11 @@ public class App {
             CargaPerecivel cargaP = new CargaPerecivel(codigo, descricao, origem, validade);
             break;
         }
-          System.out.println("Para sair, digite \"0\": ");
-          sair = teclado.nextInt();
+        System.out.println("Para sair, digite \"0\": ");
+        sair = teclado.nextInt();
       } while (sair != 0);
-    }catch (IllegalArgumentException i) {
-        i.getMessage();
+    } catch (IllegalArgumentException i) {
+      i.getMessage();
     }
   }
 
@@ -273,7 +273,7 @@ public class App {
       do {
         System.out.println("Digite o codigo da carga (codigo tem que ser unico):");
         int codigo = teclado.nextInt();
-        if (cargas.checkCargaIdJaExiste(codigo)){
+        if (cargas.checkCargaIdJaExiste(codigo)) {
           throw new IllegalArgumentException("codigo ja cadastrado");
         }
         System.out.println("Digite o id do cliente:");
@@ -292,13 +292,15 @@ public class App {
         int idTipoCarga = teclado.nextInt();
         System.out.println("Digite a prioridade da entrega (RAPIDO ou BARATO):");
         String prioridade = teclado.nextLine();
-        try{Prioridade.valueOf(prioridade);
-        }catch (IllegalArgumentException e){
+        try {
+          Prioridade.valueOf(prioridade);
+        } catch (IllegalArgumentException e) {
           throw new IllegalArgumentException("Prioridade deve ser RAPIDO ou BARATO!!");
         }
         teclado.nextLine();
 
-        Carga carga = new Carga(codigo,id,idOrigem,idDestino,peso,valorDeclarado,tempoMaximo,idTipoCarga,prioridade,"PENDENTE");
+        Carga carga = new Carga(codigo, id, idOrigem, idDestino, peso, valorDeclarado, tempoMaximo, idTipoCarga,
+            prioridade, "PENDENTE");
 
         System.out.println("Para sair, digite \"0\": ");
         sair = teclado.nextInt();
@@ -344,13 +346,20 @@ public class App {
     cargas.mostrarCargas();
   }
 
-  public void alterarSituacaoCarga(int identificador, String situacao) {
-    Carga c = cargas.getCargaId(identificador);
-    if (c != null) {
-      c.toString();
-      c.setSituacao(situacao);
-    } else {
-      System.out.println("NAO EXISTEM CARGAS COM ESTE IDENTIFICADOR");
+  public void alterarCarga() {
+    try {
+      int codigo = teclado.nextInt();
+      Carga c = cargas.getCargaId(codigo);
+      if (c != null) {
+        c.toString();
+        System.out.println("Digite a nova situação da carga:");
+        String situacao = teclado.nextLine();
+        c.setSituacao(situacao);
+      } else {
+        System.out.println("NAO EXISTEM CARGAS COM ESTE IDENTIFICADOR");
+      }
+    } catch (InputMismatchException e) {
+      System.out.println("Input inválido.");
     }
   }
 
@@ -361,9 +370,7 @@ public class App {
         double distancia = distancias.getDistanciaPortos(c.getIdPortoOrigem(), c.getIdPortoDestino());
 
         if (distancia == -1) {
-          System.setOut(standard);
           System.out.println("Distância entre portos não cadastrada, ou código de portos inválidos.");
-          System.setOut(streamSaida);
           continue;
         }
         double precoPeso = tiposCargas.getPrecoPeso(c.getIdTipoCarga(), c.getPeso(),
@@ -374,20 +381,16 @@ public class App {
         boolean haNavioAutonomia = frota.haNavioAutonomia(distancia);
         if (!haNavioAutonomia) {
           c.setSituacao(Situacao.CANCELADO.name());
-          System.setOut(standard);
           System.out.println(
               "Não há navios com autonomia suficiente para realizar o transporte da carga de id: " + c.getId());
-          System.setOut(streamSaida);
           continue;
         }
 
         Navio melhorNavio = frota.getMelhorNavio(c.getPrioridade(), distancia);
 
         if (melhorNavio == null) {
-          System.setOut(standard);
           System.out
               .println("Não há navios que possam realizar o transporte da carga de id: " + c.getId() + " no momento.");
-          System.setOut(streamSaida);
           continue;
         }
 
@@ -401,11 +404,19 @@ public class App {
         melhorNavio.addCarga(c);
 
       } catch (Exception e) {
-        System.setOut(standard);
         System.out.println("Erro.");
-        System.setOut(streamSaida);
       }
     }
+  }
 
+  public void salvarDados() {
+    try {
+      Gson gson = new Gson();
+      String json = gson.toJson(cargas);
+      System.out.printf(json);
+    } catch (Exception e) {
+      e.printStackTrace();
+      ;
+    }
   }
 }

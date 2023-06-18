@@ -1,69 +1,43 @@
-package InterfaceGrafica;
+package src.com.acmehandel.gui;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class FormularioCarga extends JFrame {
-    private JTextField id;
-    private JTextField peso;
-    private JTextField valorDeclarado;
-    private JTextField tempoMaximo;
-    private JTextField tipoCarga;
-    private JRadioButton barato,rapido;
+public class FormularioPorto extends JFrame {
+    private JTextField codPorto;
+    private JTextField nome;
+    private JTextField pais;
     private JButton botaoCadastrar, botaoMostrarCadastrados, botaoSair, botaoLimpar;
     private JLabel mensagem;
 
-    public FormularioCarga() {
+    public FormularioPorto() {
         super();
         JPanel janelaPrincipal = new JPanel();
         janelaPrincipal.setLayout(new BorderLayout());
-        setTitle("Cadastro de Cargas");
+        setTitle("Cadastro de Portos");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(650, 300);
-        GridLayout gridCampos = new GridLayout(7, 2);
+        GridLayout gridCampos = new GridLayout(4, 2);
 
         JPanel painel = new JPanel();
         painel.setLayout(gridCampos);
 
-        JLabel stringCadastroDeClientes = new JLabel("Cadastro de Cargas: ");
+        JLabel stringCadastroDeClientes = new JLabel("Cadastro de Porto: ");
         stringCadastroDeClientes.setFont(new Font("Arial", Font.BOLD, 14));
         painel.add(stringCadastroDeClientes);
         painel.add(new JLabel());
 
-        painel.add(new JLabel("Codigo identificador da carga:"));
-        id = new JTextField();
-        painel.add(id);
+        painel.add(new JLabel("Codigo do porto:"));
+        codPorto = new JTextField();
+        painel.add(codPorto);
 
-        painel.add(new JLabel("Peso da carga:"));
-        peso = new JTextField();
-        painel.add(peso);
+        painel.add(new JLabel("Nome do porto:"));
+        nome = new JTextField();
+        painel.add(nome);
 
-        painel.add(new JLabel("Valor declarado:"));
-        valorDeclarado = new JTextField();
-        painel.add(valorDeclarado);
-
-        painel.add(new JLabel("Tempo Maximo:"));
-        tempoMaximo = new JTextField();
-        painel.add(tempoMaximo);
-
-        painel.add(new JLabel("Numero do tipo de carga:"));
-        tipoCarga = new JTextField();
-        painel.add(tipoCarga);
-
-
-
-        painel.add(new JLabel("Selecione o tipo de entrega (prioridade):"));
-
-        JPanel painelCheck = new JPanel(new GridLayout(1,2));
-        barato = new JRadioButton("Barato");
-        rapido = new JRadioButton("Rapido");
-
-        ButtonGroup botoesCheck = new ButtonGroup();
-        botoesCheck.add(barato);
-        botoesCheck.add(rapido);
-
-        painelCheck.add(barato);
-        painelCheck.add(rapido);
-        painel.add(painelCheck);
+        painel.add(new JLabel("Pais:"));
+        pais = new JTextField();
+        painel.add(pais);
 
         janelaPrincipal.add(painel, BorderLayout.CENTER);
 
@@ -73,17 +47,19 @@ public class FormularioCarga extends JFrame {
         botaoCadastrar = new JButton("Cadastrar");
         mensagem = new JLabel();
 
-    /* Tratamento de evento do botao
-    botao.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        mensagem.setForeground(Color.RED);
-        mensagem.setText("Botão 'Enviar' pressionado: " +
-            "Código: " + codCliente.getText() + ", Nome: " + nomeCliente.getText() +
-            "Autonomia: " + emailCliente.getText());
-      }
-    });
-    */
+        /*
+         * Tratamento de evento do botao
+         * botao.addActionListener(new ActionListener() {
+         * 
+         * @Override
+         * public void actionPerformed(ActionEvent e) {
+         * mensagem.setForeground(Color.RED);
+         * mensagem.setText("Botão 'Enviar' pressionado: " +
+         * "Código: " + codCliente.getText() + ", Nome: " + nomeCliente.getText() +
+         * "Autonomia: " + emailCliente.getText());
+         * }
+         * });
+         */
 
         FlowLayout botaoLayout = new FlowLayout();
         botaoPainel = new JPanel(botaoLayout);
@@ -91,7 +67,7 @@ public class FormularioCarga extends JFrame {
         botaoCadastrar = new JButton("Cadastrar");
         botaoCadastrar.setBackground(Color.BLUE);
         botaoCadastrar.setForeground(Color.WHITE);
-        //tratar eventos botaoCadastrar.addActionListener
+        // tratar eventos botaoCadastrar.addActionListener
         botaoPainel.add(botaoCadastrar);
 
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");

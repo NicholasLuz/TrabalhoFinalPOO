@@ -35,12 +35,16 @@ public class Navio {
     return custoPorMilhaBasico;
   }
 
-  public boolean addCarga(Carga carga) {
-    return historicoCargas.add(carga);
+  public ArrayList<Carga> getHistoricoCargas() {
+    return historicoCargas;
   }
 
   public boolean isTransporting() {
     return isTransporting;
+  }
+
+  public boolean addCarga(Carga carga) {
+    return historicoCargas.add(carga);
   }
 
   public void setIsTransportingTrue() {

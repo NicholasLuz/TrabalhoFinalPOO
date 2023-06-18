@@ -7,8 +7,6 @@ import src.com.acmehandel.modelo.*;
 
 public class CSVReader {
   private Scanner entrada = null;
-  private PrintStream standard = System.out;
-  private PrintStream streamSaida;
   private String[] nomesArquivos = { "PORTOS", "DISTANCIAS", "NAVIOS", "CLIENTES", "TIPOSCARGAS", "CARGAS" };
 
   public void readFiles(String filePrefix, Portos portos, Distancias distancias,
@@ -46,8 +44,6 @@ public class CSVReader {
           default:
             break;
         }
-        streamSaida = new PrintStream(new File("output/resultado.csv"));
-        System.setOut(streamSaida);
       }
     } catch (Exception e) {
       System.out.println(e);
@@ -65,9 +61,7 @@ public class CSVReader {
         Porto p = new Porto(idPorto, nomePorto, paisPorto);
         portos.adicionaPorto(p);
       } catch (Exception e) {
-        System.setOut(standard);
         System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + " apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
       }
     }
     portos.sort();
@@ -83,9 +77,7 @@ public class CSVReader {
         Distancia d = new Distancia(idOrigem, idDestino, distancia);
         distancias.adicionaDistancias(d);
       } catch (Exception e) {
-        System.setOut(standard);
         System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
       }
     }
   }
@@ -101,9 +93,7 @@ public class CSVReader {
         Navio n = new Navio(nome, velocidade, autonomia, custoMilha);
         frota.adicionaNavio(n);
       } catch (Exception e) {
-        System.setOut(standard);
         System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
       }
     }
     frota.sort();
@@ -119,9 +109,7 @@ public class CSVReader {
         Cliente c = new Cliente(codCli, nomeCli, emailCli);
         clientes.adicionaCliente(c);
       } catch (Exception e) {
-        System.setOut(standard);
         System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
       }
     }
     clientes.sort();
@@ -148,9 +136,7 @@ public class CSVReader {
 
         }
       } catch (Exception e) {
-        System.setOut(standard);
         System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
       }
     }
     tiposCargas.sort();
@@ -178,16 +164,12 @@ public class CSVReader {
               prioridade, situacao);
           cargas.adicionaCarga(c);
         } else {
-          System.setOut(standard);
           System.out.println("Linha " + (i + 2) + " do arquivo " + fileName
               + "apresenta erros. Informações não existentes no cadastro da carga.");
-          System.setOut(streamSaida);
         }
 
       } catch (Exception e) {
-        System.setOut(standard);
         System.out.println("Linha " + (i + 2) + " do arquivo " + fileName + "apresenta erros. Ajuste o arquivo.");
-        System.setOut(streamSaida);
       }
     }
     cargas.sort();
