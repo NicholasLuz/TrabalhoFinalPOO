@@ -4,7 +4,7 @@ public class Carga {
   private int identificador, idCliente, idPortoOrigem, idPortoDestino, peso, tempoMaximo, idTipoCarga;
   private double valorDeclarado, valorFrete;
   private String prioridade, situacao;
-  private Navio navio;
+  private String navio;
 
   public Carga(int identificador, int idCliente, int idPortoOrigem, int idPortoDestino, int peso, double valorDeclarado,
       int tempoMaximo, int idTipoCarga, String prioridade, String situacao) {
@@ -64,13 +64,13 @@ public class Carga {
     return valorFrete;
   }
 
-  public Navio getNavio() {
+  public String getNomeNavio() {
     return navio;
   }
 
   public void alocarNavio(Navio n, double valorFrete) {
     this.valorFrete = valorFrete;
-    navio = n;
+    this.navio = n.getNome();
     setSituacao(Situacao.LOCADO.name());
   }
 
@@ -84,16 +84,14 @@ public class Carga {
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
     }
-    try {
-      for (Situacao s : Situacao.values()) {
-        if (sit.equals(s.name())) {
-          situacao = sit;
-          return true;
-        }
+
+    for (Situacao s : Situacao.values()) {
+      if (sit.equals(s.name())) {
+        situacao = sit;
+        return true;
       }
-    } catch (Exception e) {
-      System.out.println("SITUACAO INSERIDA INVALIDA");
     }
+    System.out.println("Situação inválida.");
     return false;
   }
 

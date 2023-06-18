@@ -7,7 +7,7 @@ public class Navio {
   private double velocidade;
   private double autonomia;
   private double custoPorMilhaBasico;
-  private ArrayList<Carga> historicoCargas;
+  private ArrayList<Integer> historicoCargas;
   private boolean isTransporting;
 
   public Navio(String nome, double velocidade, double autonomia, double custoPorMilhaBasico) {
@@ -15,7 +15,7 @@ public class Navio {
     this.velocidade = velocidade;
     this.autonomia = autonomia;
     this.custoPorMilhaBasico = custoPorMilhaBasico;
-    this.historicoCargas = new ArrayList<Carga>();
+    this.historicoCargas = new ArrayList<Integer>();
     this.isTransporting = false;
   }
 
@@ -35,7 +35,7 @@ public class Navio {
     return custoPorMilhaBasico;
   }
 
-  public ArrayList<Carga> getHistoricoCargas() {
+  public ArrayList<Integer> getHistoricoCargas() {
     return historicoCargas;
   }
 
@@ -44,7 +44,7 @@ public class Navio {
   }
 
   public boolean addCarga(Carga carga) {
-    return historicoCargas.add(carga);
+    return historicoCargas.add(carga.getId());
   }
 
   public void setIsTransportingTrue() {
@@ -53,5 +53,10 @@ public class Navio {
 
   public void setIsTransportingFalse() {
     isTransporting = false;
+  }
+
+  @Override
+  public String toString() {
+    return (nome);
   }
 }
