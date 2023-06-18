@@ -16,7 +16,7 @@ public class TiposCargas {
     for (TipoCarga tc : tiposCargas) {
       if (tc.getNumero() == numero) {
         if (tc instanceof CargaDuravel) {
-          return ((peso * 1.5) + (valorDeclarado * ((CargaDuravel) tc).getPercentualIpi()));
+          return ((peso * 1.5) + (valorDeclarado * ((CargaDuravel) tc).getPercentualIpi()/100.0));
         }
         if (tc instanceof CargaPerecivel) {
           return peso * 2;

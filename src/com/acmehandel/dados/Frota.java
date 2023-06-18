@@ -11,6 +11,15 @@ public class Frota {
     this.frota = new ArrayList<Navio>();
   }
 
+  public Navio getNavioNome(String nome) {
+    for (Navio n : frota) {
+      if (n.getNome().equals(nome)) {
+        return n;
+      }
+    }
+    return null;
+  }
+
   public boolean checkNomeNavioJaExiste(String nome) {
     for (Navio n : frota) {
       if (n.getNome().equals(nome)) {
@@ -23,7 +32,7 @@ public class Frota {
   public Navio getMelhorNavio(String prioridade, double distancia) {
     ArrayList<Navio> naviosAutonomiaDisponivel = new ArrayList<Navio>();
     for (Navio n : frota) {
-      if (n.getAutonomia() <= distancia && !n.isTransporting()) {
+      if (n.getAutonomia() >= distancia && !n.isTransporting()) {
         naviosAutonomiaDisponivel.add(n);
       }
     }
@@ -73,7 +82,7 @@ public class Frota {
 
   public boolean haNavioAutonomia(double distancia) {
     for (Navio n : frota) {
-      if (n.getAutonomia() <= distancia) {
+      if (n.getAutonomia() >= distancia) {
         return true;
       }
     }

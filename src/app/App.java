@@ -2,6 +2,8 @@ package src.app;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import src.com.acmehandel.dados.*;
 import src.com.acmehandel.modelo.*;
 import src.com.acmehandel.util.CSVReader;
@@ -17,6 +19,7 @@ public class App {
   private Scanner teclado = new Scanner(System.in);
   private Scanner entradaTerminal; // Atributo para entrada de dados
   private PrintStream standard = System.out;
+  private PrintStream streamSaida;
 
   public void executar() {
     System.setOut(standard);
@@ -72,7 +75,7 @@ public class App {
         alterarCarga();
         break;
       case 4:
-        fretarCargas();
+        fretarCargasPendentes();
         break;
       case 5:
         salvarDados();
@@ -133,10 +136,10 @@ public class App {
         cadastraNovoCliente();
         break;
       case 4:
-        // cadastrar tipo de carga
+        cadastraNovoTipoCarga();
         break;
       case 5:
-        // cadastrar carga
+        cadastraNovaCarga();
         break;
       case 6:
         break;
@@ -249,6 +252,7 @@ public class App {
             System.out.println("Digite o percentual do IPI:");
             double percentualIPI = teclado.nextDouble();
             CargaDuravel cargaD = new CargaDuravel(codigo, descricao, setor, materialPrincipal, percentualIPI);
+            tiposCargas.adicionaTipoCarga(cargaD);
             break;
           case PERECIVEL:
             System.out.println("Digite a origem:");
@@ -257,6 +261,7 @@ public class App {
             System.out.println("Digite o tempo maximo de validade:");
             int validade = teclado.nextInt();
             CargaPerecivel cargaP = new CargaPerecivel(codigo, descricao, origem, validade);
+            tiposCargas.adicionaTipoCarga(cargaP);
             break;
         }
         System.out.println("Para sair, digite \"0\": ");
@@ -301,6 +306,8 @@ public class App {
 
         Carga carga = new Carga(codigo, id, idOrigem, idDestino, peso, valorDeclarado, tempoMaximo, idTipoCarga,
             prioridade, "PENDENTE");
+
+        cargas.adicionaCarga(carga);
 
         System.out.println("Para sair, digite \"0\": ");
         sair = teclado.nextInt();
@@ -348,13 +355,45 @@ public class App {
 
   public void alterarCarga() {
     try {
+      System.out.println("Digite o id da carga:");
       int codigo = teclado.nextInt();
+      teclado.nextLine();
       Carga c = cargas.getCargaId(codigo);
       if (c != null) {
-        c.toString();
+        System.out.println(c.toString());
         System.out.println("Digite a nova situação da carga:");
         String situacao = teclado.nextLine();
-        c.setSituacao(situacao);
+        boolean exists = false;
+        String sit = c.getSituacao();
+
+        for (Situacao s : Situacao.values()) {
+          if (situacao.equals(s.name())) {
+            exists = true;
+            break;
+          }
+        }
+
+        if (!exists) {
+          System.out.println("Situação inválida.");
+          return;
+        }
+
+        switch (Situacao.valueOf(sit)) {
+          case FINALIZADO:
+            System.out.println("A carga está finalizada, não pode ser alterada.");
+            break;
+          case CANCELADO:
+            alterarCargaCancelada(situacao, c);
+            break;
+          case PENDENTE:
+            alterarCargaPendente(situacao, c);
+            break;
+          case LOCADO:
+            alterarCargaLocada(situacao, c);
+            break;
+          default:
+            break;
+        }
       } else {
         System.out.println("NAO EXISTEM CARGAS COM ESTE IDENTIFICADOR");
       }
@@ -363,8 +402,64 @@ public class App {
     }
   }
 
-  public void fretarCargas() {
+  public void alterarCargaCancelada(String sit, Carga c) {
+    if (sit.equals(Situacao.PENDENTE.name())) {
+      c.setSituacao(sit);
+    } else if(sit.equals(Situacao.LOCADO.name())) {
+      fretarCargaEspecifica(c.getId());
+    } else {
+      System.out.println("Não foi possível alterar a situação da carga.");
+    }
+  } 
+
+  public void alterarCargaPendente(String sit, Carga c) {
+    if (sit.equals(Situacao.CANCELADO.name())) {
+      c.setSituacao(sit);
+    } else if(sit.equals(Situacao.LOCADO.name())) {
+      fretarCargaEspecifica(c.getId());
+    } else {
+      System.out.println("Não foi possível alterar a situação da carga.");
+    }
+  } 
+
+   public void alterarCargaLocada(String sit, Carga c) {
+    if (sit.equals(Situacao.CANCELADO.name())) {
+      c.setSituacao(sit);
+      String nomeNav = c.getNomeNavio();
+      Navio n = frota.getNavioNome(nomeNav);
+      n.setIsTransportingFalse();
+    } else if(sit.equals(Situacao.FINALIZADO.name())) {
+      c.setSituacao(sit);
+      String nomeNav = c.getNomeNavio();
+      Navio n = frota.getNavioNome(nomeNav);
+      n.setIsTransportingFalse();
+      n.addCarga(c);
+    } else if(sit.equals(Situacao.PENDENTE.name())) {
+      c.setSituacao(sit);
+      String nomeNav = c.getNomeNavio();
+      Navio n = frota.getNavioNome(nomeNav);
+      n.setIsTransportingFalse();
+    } else {
+      System.out.println("Não foi possível alterar a situação da carga.");
+    }
+  } 
+
+  public void fretarCargasPendentes() {
     List<Carga> cargasPendentes = cargas.getPendentes();
+
+    fretarCargas(cargasPendentes);
+  }
+
+  public void fretarCargaEspecifica(int codigo) {
+    Carga c = cargas.getCargaId(codigo);
+    ArrayList<Carga> cargasP = new ArrayList<Carga>();
+    cargasP.add(c);
+    List<Carga> cargasPendentes = cargasP.stream().collect(Collectors.toList());
+    
+    fretarCargas(cargasPendentes);
+  }
+
+  private void fretarCargas(List<Carga> cargasPendentes) {
     for (Carga c : cargasPendentes) {
       try {
         double distancia = distancias.getDistanciaPortos(c.getIdPortoOrigem(), c.getIdPortoDestino());
@@ -401,7 +496,7 @@ public class App {
         double valorFrete = (distancia * custoAjustado) + precoPeso + precoRegiao;
         c.alocarNavio(melhorNavio, valorFrete);
         melhorNavio.setIsTransportingTrue();
-        melhorNavio.addCarga(c);
+        System.out.println("Navio "+melhorNavio.getNome() + " designado para carga "+ c.getId());
 
       } catch (Exception e) {
         System.out.println("Erro.");
@@ -411,12 +506,26 @@ public class App {
 
   public void salvarDados() {
     try {
+      String pathname = "output/objetosJson.txt";
+      streamSaida = new PrintStream(new File(pathname));
+      System.setOut(streamSaida);
       Gson gson = new Gson();
       String json = gson.toJson(cargas);
-      System.out.printf(json);
+      System.out.println(json);
+      String json2 = gson.toJson(frota);
+      System.out.println(json2);
+      String json3 = gson.toJson(portos);
+      System.out.println(json3);
+      String json4 = gson.toJson(distancias);
+      System.out.println(json4);
+      String json5 = gson.toJson(clientes);
+      System.out.println(json5);
+      String json6 = gson.toJson(tiposCargas);
+      System.out.println(json6);
+      System.setOut(standard);
+      System.out.println("Dados salvados com sucesso em: "+pathname);
     } catch (Exception e) {
       e.printStackTrace();
-      ;
     }
   }
 }
