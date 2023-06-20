@@ -179,14 +179,35 @@ public class App {
 
         Porto p = new Porto(id, nome, pais);
         if (!portos.adicionaPorto(p)) {
-          System.out.println("Ocorreu um erro: id do porto ja cadastrado");
+          throw new IllegalArgumentException("Ocorreu um erro: id do porto ja cadastrado");
         }
-
+        adicionaDistanciaPortos(p);
+        portos.sort();
         System.out.println("Para sair, digite \"0\": ");
         sair = teclado.nextInt();
       } while (sair != 0);
-    } catch (IllegalStateException e) {
+    } catch (InputMismatchException e) {
+      System.out.println("Input inválido, insira número inteiro");
+    } catch (IllegalArgumentException e) {
       e.getMessage();
+    }
+  }
+
+  public void adicionaDistanciaPortos(Porto p) {
+    if (portos.size() > 1) {
+      for (int i = 0; i < portos.size(); i++) {
+        if (p.getId() != portos.getPortoId(i).getId()) {
+          int idOrigem = p.getId();
+          int idDestino = portos.getPortoId(i).getId();
+          if (idOrigem > idDestino) {
+            int aux = idOrigem;
+            idOrigem = idDestino;
+            idDestino = aux;
+          }
+          Distancia d = new Distancia(idOrigem, idDestino, 100.0);
+          distancias.adicionaDistancias(d);
+        }
+      }
     }
   }
 
@@ -212,6 +233,7 @@ public class App {
           System.out.println("Ocorreu um erro: Ja existe navio com este nome");
         }
 
+        frota.sort();
         System.out.println("Para sair, digite \"0\": ");
         sair = teclado.nextInt();
       } while (sair != 0);
@@ -264,6 +286,7 @@ public class App {
             tiposCargas.adicionaTipoCarga(cargaP);
             break;
         }
+        tiposCargas.sort();
         System.out.println("Para sair, digite \"0\": ");
         sair = teclado.nextInt();
       } while (sair != 0);
@@ -308,6 +331,7 @@ public class App {
             prioridade, "PENDENTE");
 
         cargas.adicionaCarga(carga);
+        cargas.sort();
 
         System.out.println("Para sair, digite \"0\": ");
         sair = teclado.nextInt();
@@ -340,6 +364,8 @@ public class App {
         if (!clientes.adicionaCliente(c)) {
           System.out.println("Ocorreu um erro: codigo ou email ja cadastrados.");
         }
+
+        clientes.sort();
 
         System.out.println("Para sair, digite \"0\": ");
         sair = teclado.nextInt();
@@ -405,36 +431,36 @@ public class App {
   public void alterarCargaCancelada(String sit, Carga c) {
     if (sit.equals(Situacao.PENDENTE.name())) {
       c.setSituacao(sit);
-    } else if(sit.equals(Situacao.LOCADO.name())) {
+    } else if (sit.equals(Situacao.LOCADO.name())) {
       fretarCargaEspecifica(c.getId());
     } else {
       System.out.println("Não foi possível alterar a situação da carga.");
     }
-  } 
+  }
 
   public void alterarCargaPendente(String sit, Carga c) {
     if (sit.equals(Situacao.CANCELADO.name())) {
       c.setSituacao(sit);
-    } else if(sit.equals(Situacao.LOCADO.name())) {
+    } else if (sit.equals(Situacao.LOCADO.name())) {
       fretarCargaEspecifica(c.getId());
     } else {
       System.out.println("Não foi possível alterar a situação da carga.");
     }
-  } 
+  }
 
-   public void alterarCargaLocada(String sit, Carga c) {
+  public void alterarCargaLocada(String sit, Carga c) {
     if (sit.equals(Situacao.CANCELADO.name())) {
       c.setSituacao(sit);
       String nomeNav = c.getNomeNavio();
       Navio n = frota.getNavioNome(nomeNav);
       n.setIsTransportingFalse();
-    } else if(sit.equals(Situacao.FINALIZADO.name())) {
+    } else if (sit.equals(Situacao.FINALIZADO.name())) {
       c.setSituacao(sit);
       String nomeNav = c.getNomeNavio();
       Navio n = frota.getNavioNome(nomeNav);
       n.setIsTransportingFalse();
       n.addCarga(c);
-    } else if(sit.equals(Situacao.PENDENTE.name())) {
+    } else if (sit.equals(Situacao.PENDENTE.name())) {
       c.setSituacao(sit);
       String nomeNav = c.getNomeNavio();
       Navio n = frota.getNavioNome(nomeNav);
@@ -442,7 +468,7 @@ public class App {
     } else {
       System.out.println("Não foi possível alterar a situação da carga.");
     }
-  } 
+  }
 
   public void fretarCargasPendentes() {
     List<Carga> cargasPendentes = cargas.getPendentes();
@@ -455,7 +481,7 @@ public class App {
     ArrayList<Carga> cargasP = new ArrayList<Carga>();
     cargasP.add(c);
     List<Carga> cargasPendentes = cargasP.stream().collect(Collectors.toList());
-    
+
     fretarCargas(cargasPendentes);
   }
 
@@ -496,7 +522,7 @@ public class App {
         double valorFrete = (distancia * custoAjustado) + precoPeso + precoRegiao;
         c.alocarNavio(melhorNavio, valorFrete);
         melhorNavio.setIsTransportingTrue();
-        System.out.println("Navio "+melhorNavio.getNome() + " designado para carga "+ c.getId());
+        System.out.println("Navio " + melhorNavio.getNome() + " designado para carga " + c.getId());
 
       } catch (Exception e) {
         System.out.println("Erro.");
@@ -523,7 +549,7 @@ public class App {
       String json6 = gson.toJson(tiposCargas);
       System.out.println(json6);
       System.setOut(standard);
-      System.out.println("Dados salvados com sucesso em: "+pathname);
+      System.out.println("Dados salvados com sucesso em: " + pathname);
     } catch (Exception e) {
       e.printStackTrace();
     }

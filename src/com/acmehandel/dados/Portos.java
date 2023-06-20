@@ -44,6 +44,10 @@ public class Portos {
     return portos.add(p);
   }
 
+  public Porto getPortoId(int index) {
+    return portos.get(index);
+  }
+
   public void mostrarPortos() {
     for (Porto p : portos) {
       System.out.println("Id: " + p.getId() + ";Nome: " + p.getNome() + ";País: " + p.getPais());
@@ -51,6 +55,10 @@ public class Portos {
     if (portos.size() == 0) {
       System.out.println("Não há portos cadastrados.");
     }
+  }
+
+  public int size() {
+    return portos.size();
   }
 
   public void sort() {
