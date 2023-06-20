@@ -35,14 +35,12 @@ public class Clientes {
     return clientes.add(c);
   }
 
-  public void mostrarClientes() {
+  public String mostrarClientes() {
+    String printClientes = "";
     for (Cliente c : clientes) {
-      System.out.println(
-          "Código: " + c.getCod() + ";Nome: " + c.getNome() + ";Email: " + c.getEmail());
+      printClientes += "Código: " + c.getCod() + ";Nome: " + c.getNome() + ";Email: " + c.getEmail() + "\n";
     }
-    if (clientes.size() == 0) {
-      System.out.println("Não há clientes cadastrados.");
-    }
+    return printClientes;
   }
 
   public void sort() {

@@ -15,8 +15,9 @@ public class FormularioNavio extends JFrame {
         JPanel janelaPrincipal = new JPanel();
         janelaPrincipal.setLayout(new BorderLayout());
         setTitle("Cadastro de Navios");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(650, 300);
+        setLocationRelativeTo(null);
 
         JPanel painel = new JPanel();
         painel.setLayout(new GridLayout(5, 2));
@@ -62,15 +63,12 @@ public class FormularioNavio extends JFrame {
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
         botaoMostrarCadastrados.setBackground(Color.BLUE);
         botaoMostrarCadastrados.setForeground(Color.WHITE);
-        // -> tratamento de evento em classe separada?
-        /*
-         * botaoMostrarCadastrados.addActionListener(new ActionListener() {
-         * public void actionPerformed(ActionEvent e) {
-         * String todosCadastrados = cadastrados.mostrarFrota();
-         * JOptionPane.showMessageDialog(null,todosCadastrados);
-         * }
-         * });
-         */
+        botaoMostrarCadastrados.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // String todosCadastrados = cadastrados.mostrarFrota();
+                JOptionPane.showMessageDialog(null, "todosCadastrados");
+            }
+        });
         buttonPanel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
@@ -86,13 +84,11 @@ public class FormularioNavio extends JFrame {
         botaoSair = new JButton("Sair");
         botaoSair.setBackground(Color.BLACK);
         botaoSair.setForeground(Color.WHITE);
-        /*
-         * botaoSair.addActionListener(new ActionListener() {
-         * public void actionPerformed(ActionEvent e) {
-         * System.exit(0);
-         * }
-         * });
-         */
+        botaoSair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
         buttonPanel.add(botaoSair);
 
         janelaPrincipal.add(buttonPanel, BorderLayout.SOUTH);

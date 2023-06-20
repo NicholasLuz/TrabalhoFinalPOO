@@ -2,13 +2,6 @@
   "configurations": [
     {
       "type": "java",
-      "name": "MainInterface",
-      "request": "launch",
-      "mainClass": "src.com.acmehandel.gui.MainInterface",
-      "projectName": "TrabalhoFinalPOO-main_b346a772"
-    },
-    {
-      "type": "java",
       "name": "Debug (Launch)",
       "request": "launch",
       "mainClass": "src.app.Main",

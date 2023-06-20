@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import src.com.acmehandel.dados.*;
+import src.com.acmehandel.gui.MainInterface;
 import src.com.acmehandel.modelo.*;
 import src.com.acmehandel.util.CSVReader;
 import com.google.gson.Gson;
@@ -22,43 +23,7 @@ public class App {
   private PrintStream streamSaida;
 
   public void executar() {
-    System.setOut(standard);
-    while (true) {
-      menuGeral();
-      int resposta = escolherOpcaoMenuGeral();
-      tratarRespostaMenuGeral(resposta);
-    }
-  }
-
-  private void menuGeral() {
-    System.out.println("Bem vindo(a) ao ACMEHandelsschifffahrtsgesellschaft!");
-    System.out.println("----------- O que deseja fazer? -----------");
-    System.out.println("| (1) Cadastrar novo dado                 |");
-    System.out.println("| (2) Consultar todas as cargas           |");
-    System.out.println("| (3) Alterar a situação de uma carga     |");
-    System.out.println("| (4) Fretar cargas                       |");
-    System.out.println("| (5) Salvar dados                        |");
-    System.out.println("| (6) Carregar dados de arquivo externo   |");
-    System.out.println("| (0) Finalizar sistema                   |");
-    System.out.println("-------------------------------------------");
-  }
-
-  public int escolherOpcaoMenuGeral() {
-    boolean continuar = false;
-    int resposta = 0;
-    while (!continuar) {
-      try {
-        resposta = Integer.parseInt(teclado.nextLine());
-
-        if (resposta < 0 || resposta > 6) {
-          throw new InputMismatchException();
-        }
-        continuar = true;
-      } catch (InputMismatchException | NumberFormatException e) {
-        System.out.println("Valor inválido, insira valor da lista.");
-      }
-    }
-    return resposta;
+    MainInterface gui = new MainInterface(clientes, cargas, distancias, frota, portos, tiposCargas);
   }
 
   public void tratarRespostaMenuGeral(int resposta) {

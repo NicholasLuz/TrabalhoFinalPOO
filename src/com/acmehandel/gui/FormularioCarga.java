@@ -2,14 +2,14 @@ package src.com.acmehandel.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.InputMismatchException;
 
 public class FormularioCarga extends JFrame {
-    private JTextField id;
-    private JTextField peso;
-    private JTextField valorDeclarado;
-    private JTextField tempoMaximo;
-    private JTextField tipoCarga;
+    private JTextField id, peso, valorDeclarado, tempoMaximo, tipoCarga;
     private JRadioButton barato, rapido;
+    private ButtonGroup botoesCheck;
     private JButton botaoCadastrar, botaoMostrarCadastrados, botaoSair, botaoLimpar;
     private JLabel mensagem;
 
@@ -18,10 +18,10 @@ public class FormularioCarga extends JFrame {
         JPanel janelaPrincipal = new JPanel();
         janelaPrincipal.setLayout(new BorderLayout());
         setTitle("Cadastro de Cargas");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(650, 300);
         GridLayout gridCampos = new GridLayout(7, 2);
-
+        setLocationRelativeTo(null);
         JPanel painel = new JPanel();
         painel.setLayout(gridCampos);
 
@@ -56,7 +56,7 @@ public class FormularioCarga extends JFrame {
         barato = new JRadioButton("Barato");
         rapido = new JRadioButton("Rapido");
 
-        ButtonGroup botoesCheck = new ButtonGroup();
+        botoesCheck = new ButtonGroup();
         botoesCheck.add(barato);
         botoesCheck.add(rapido);
 
@@ -69,30 +69,17 @@ public class FormularioCarga extends JFrame {
         JPanel botaoPainel = new JPanel();
         botaoPainel.setLayout(new FlowLayout());
 
-        botaoCadastrar = new JButton("Cadastrar");
-        mensagem = new JLabel();
-
-        /*
-         * Tratamento de evento do botao
-         * botao.addActionListener(new ActionListener() {
-         * 
-         * @Override
-         * public void actionPerformed(ActionEvent e) {
-         * mensagem.setForeground(Color.RED);
-         * mensagem.setText("Botão 'Enviar' pressionado: " +
-         * "Código: " + codCliente.getText() + ", Nome: " + nomeCliente.getText() +
-         * "Autonomia: " + emailCliente.getText());
-         * }
-         * });
-         */
-
         FlowLayout botaoLayout = new FlowLayout();
         botaoPainel = new JPanel(botaoLayout);
 
         botaoCadastrar = new JButton("Cadastrar");
         botaoCadastrar.setBackground(Color.BLUE);
         botaoCadastrar.setForeground(Color.WHITE);
-        // tratar eventos botaoCadastrar.addActionListener
+        botaoCadastrar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                cadastrarCarga();
+            }
+        });
         botaoPainel.add(botaoCadastrar);
 
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
@@ -103,11 +90,21 @@ public class FormularioCarga extends JFrame {
         botaoLimpar = new JButton("Limpar");
         botaoLimpar.setBackground(Color.BLUE);
         botaoLimpar.setForeground(Color.YELLOW);
+        botaoLimpar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                limparCampos();
+            }
+        });
         botaoPainel.add(botaoLimpar);
 
         botaoSair = new JButton("Sair");
         botaoSair.setBackground(Color.BLACK);
         botaoSair.setForeground(Color.WHITE);
+        botaoSair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
         botaoPainel.add(botaoSair);
 
         janelaPrincipal.add(botaoPainel, BorderLayout.SOUTH);
@@ -124,4 +121,97 @@ public class FormularioCarga extends JFrame {
 
     }
 
+    private void limparCampos() {
+        id.setText("");
+        valorDeclarado.setText("");
+        tipoCarga.setText("");
+        tempoMaximo.setText("");
+        peso.setText("");
+        botoesCheck.clearSelection();
+    }
+
+    private void cadastrarCarga() {
+        String msg = "";
+        try {
+            if (!rapido.isSelected() && !barato.isSelected()) {
+                throw new InputMismatchException("Preencha todos os campos!");
+            }
+            if (id.getText().isEmpty() || peso.getText().isEmpty() || valorDeclarado.getText().isEmpty()
+                    || tempoMaximo.getText().isEmpty() || tipoCarga.getText().isEmpty()) {
+                throw new InputMismatchException("Preencha todos os campos!");
+            }
+            /*
+             * if (numero ja existe) {
+             * throw new IllegalArgumentException("Já existe uma carga com este codigo.");
+             * }
+             * if (!tipocarga){
+             * throw new
+             * IllegalArgumentException("Não existe tipo de carga com este codigo.");
+             * }
+             */
+
+            try {
+                Integer.parseInt(id.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "O campo 'Codigo' só pode conter numeros", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                Integer.parseInt(tipoCarga.getText());
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "O campo 'Tipo de Carga' só pode conter numeros", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                if (Integer.parseInt(peso.getText()) < 0) {
+                    throw new NumberFormatException("O campo 'Peso' precisa ser um numero maior que zero.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "O campo 'Peso' só pode conter numeros", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                if (Double.parseDouble(valorDeclarado.getText()) < 0) {
+                    throw new NumberFormatException("O campo 'Valor declarado' precisa ser um numero maior que zero.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this,
+                        "O campo 'Valor declarado' só pode conter numeros (use PONTO ao inves de VIRGULA)", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            try {
+                if (Integer.parseInt(tempoMaximo.getText()) < 0) {
+                    throw new NumberFormatException("O campo 'Tempo Maximo' precisa ser um numero maior que zero.");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "O campo 'Tempo máximo' só pode conter numeros", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            msg = ("Botão 'Enviar' pressionado: " +
+                    "Código: " + id.getText() + ", Peso: " + peso.getText() +
+                    "Valor Declarado: " + valorDeclarado.getText() + ", Tempo maximo: " + tempoMaximo.getText()
+                    + ", Tipo de carga: " + tipoCarga.getText()
+                    + "Prioridade: ");
+
+            msg += (rapido.isSelected() ? rapido.getText() : barato.getText());
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int opcao = JOptionPane.showConfirmDialog(this, "Deseja confirmar o cadastro?", "Confirmação",
+                JOptionPane.YES_NO_OPTION);
+        if (opcao == JOptionPane.YES_OPTION) {
+            mensagem.setText(msg);
+            mensagem.setVisible(true);
+
+            limparCampos();
+        }
+    }
 }

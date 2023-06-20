@@ -2,11 +2,12 @@ package src.com.acmehandel.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.InputMismatchException;
 
 public class FormularioPorto extends JFrame {
-    private JTextField codPorto;
-    private JTextField nome;
-    private JTextField pais;
+    private JTextField codPorto, nome, pais;
     private JButton botaoCadastrar, botaoMostrarCadastrados, botaoSair, botaoLimpar;
     private JLabel mensagem;
 
@@ -15,9 +16,10 @@ public class FormularioPorto extends JFrame {
         JPanel janelaPrincipal = new JPanel();
         janelaPrincipal.setLayout(new BorderLayout());
         setTitle("Cadastro de Portos");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(650, 300);
         GridLayout gridCampos = new GridLayout(4, 2);
+        setLocationRelativeTo(null);
 
         JPanel painel = new JPanel();
         painel.setLayout(gridCampos);
@@ -44,30 +46,18 @@ public class FormularioPorto extends JFrame {
         JPanel botaoPainel = new JPanel();
         botaoPainel.setLayout(new FlowLayout());
 
-        botaoCadastrar = new JButton("Cadastrar");
-        mensagem = new JLabel();
-
-        /*
-         * Tratamento de evento do botao
-         * botao.addActionListener(new ActionListener() {
-         * 
-         * @Override
-         * public void actionPerformed(ActionEvent e) {
-         * mensagem.setForeground(Color.RED);
-         * mensagem.setText("Botão 'Enviar' pressionado: " +
-         * "Código: " + codCliente.getText() + ", Nome: " + nomeCliente.getText() +
-         * "Autonomia: " + emailCliente.getText());
-         * }
-         * });
-         */
-
         FlowLayout botaoLayout = new FlowLayout();
         botaoPainel = new JPanel(botaoLayout);
 
         botaoCadastrar = new JButton("Cadastrar");
         botaoCadastrar.setBackground(Color.BLUE);
         botaoCadastrar.setForeground(Color.WHITE);
-        // tratar eventos botaoCadastrar.addActionListener
+        botaoCadastrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cadastrarPorto();
+            }
+        });
         botaoPainel.add(botaoCadastrar);
 
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
@@ -78,11 +68,22 @@ public class FormularioPorto extends JFrame {
         botaoLimpar = new JButton("Limpar");
         botaoLimpar.setBackground(Color.BLUE);
         botaoLimpar.setForeground(Color.YELLOW);
+        botaoLimpar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limparCampos();
+            }
+        });
         botaoPainel.add(botaoLimpar);
 
         botaoSair = new JButton("Sair");
         botaoSair.setBackground(Color.BLACK);
         botaoSair.setForeground(Color.WHITE);
+        botaoSair.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
         botaoPainel.add(botaoSair);
 
         janelaPrincipal.add(botaoPainel, BorderLayout.SOUTH);
@@ -99,4 +100,57 @@ public class FormularioPorto extends JFrame {
 
     }
 
+    public void limparCampos() {
+        mensagem.setVisible(false);
+        nome.setText("");
+        pais.setText("");
+        codPorto.setText("");
+    }
+
+    private void cadastrarPorto() {
+        String nome1 = nome.getText();
+        String codigo1 = codPorto.getText();
+        String pais1 = pais.getText();
+
+        try {
+            if (nome1.isEmpty() || codigo1.isEmpty() || pais1.isEmpty()) {
+                throw new InputMismatchException("Preencha todos os campos!");
+            }
+            /*
+             * if (codigo ja existe) {
+             * throw new IllegalArgumentException("Já existe um porto com este codigo.");
+             * }
+             */
+            try {
+                if (Integer.parseInt(codigo1) <= 0) {
+                    throw new NumberFormatException("O campo 'Codigo' precisa ser um numero inteiro positivo");
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "O campo 'Codigo' só pode conter numeros", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int opcao = JOptionPane.showConfirmDialog(this, "Deseja confirmar o cadastro?", "Confirmação",
+                JOptionPane.YES_NO_OPTION);
+        if (opcao == JOptionPane.YES_OPTION) {
+            /*
+             * cadastrados.novoNavio(nome,Double.parseDouble(velocidade),Double.parseDouble(
+             * autonomia), Double.parseDouble(custoPorMilhaBasico));
+             */
+            mensagem.setText(
+                    "Botão 'Enviar' pressionado: " + "Código: " + codPorto.getText() + ", Nome: " + nome.getText() +
+                            "Pais: " + pais.getText());
+            mensagem.setForeground(Color.RED);
+            mensagem.setVisible(true);
+
+            nome.setText("");
+            pais.setText("");
+            codPorto.setText("");
+        }
+    }
 }
