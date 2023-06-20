@@ -348,25 +348,41 @@ public class App {
   }
 
   public String alterarCargaCancelada(String sit, Carga c) {
+    String frase = "";
     if (sit.equals(Situacao.PENDENTE.name())) {
       c.setSituacao(sit);
+      frase = "A carga "+c.getId()+" foi alterada para " + c.getSituacao();
     } else if (sit.equals(Situacao.LOCADO.name())) {
-      return "Para alterar a situação para LOCADO, é necessário alocar todos os pedidos pendentes: " + fretarCargaEspecifica(c.getId());
-    } else {
-      return "Não foi possível alterar a situação da carga. Situação da carga atual: "+c.getSituacao();
+      frase = "Para alterar a situação para LOCADO, é necessário alocar todos os pedidos pendentes: " + fretarCargaEspecifica(c.getId());
+    } else if (sit.equals(Situacao.CANCELADO.name())){
+      frase = "Situação solicitada igual a atual.";
     }
-    return ("A carga "+c.getId()+" foi alterada para " + c.getSituacao());
+    else if ((sit.equals(Situacao.FINALIZADO.name()))){
+      frase = "Não é possivel finalizar uma carga cancelada.";
+    }
+    else {
+      return "ERRO";
+    }
+    return frase;
   }
 
   public String alterarCargaPendente(String sit, Carga c) {
+    String frase = "";
     if (sit.equals(Situacao.CANCELADO.name())) {
       c.setSituacao(sit);
+      frase = "A carga "+c.getId()+" foi alterada para " + c.getSituacao();
     } else if (sit.equals(Situacao.LOCADO.name())) {
-      return "Para alterar a situação para LOCADO, é necessário alocar todos os pedidos pendentes: " + fretarCargaEspecifica(c.getId());
-    } else {
-      return "Não foi possível alterar a situação da carga. Situação da carga atual: "+c.getSituacao();
+      frase = "Para alterar a situação para LOCADO, é necessário alocar todos os pedidos pendentes: " + fretarCargaEspecifica(c.getId());
+    } else if (sit.equals(Situacao.PENDENTE.name())){
+      frase = "Situação solicitada igual a atual.";
     }
-    return ("A carga "+c.getId()+"foi alterada para " + c.getSituacao());
+    else if ((sit.equals(Situacao.FINALIZADO.name()))){
+      frase = "Não é possivel finalizar uma carga pendente.";
+    }
+    else {
+      return "ERRO";
+    }
+    return frase;
   }
 
   public String alterarCargaLocada(String sit, Carga c) {
@@ -390,10 +406,10 @@ public class App {
     return ("A carga "+c.getId()+"foi alterada para " + c.getSituacao());
   }
 
-  public void fretarCargasPendentes() {
+  public String fretarCargasPendentes() {
     List<Carga> cargasPendentes = cargas.getPendentes();
 
-    fretarCargas(cargasPendentes);
+    return fretarCargas(cargasPendentes);
   }
 
   public String fretarCargaEspecifica(int codigo) {
@@ -405,8 +421,11 @@ public class App {
     return fretarCargas(cargasPendentes);
   }
 
-  private String fretarCargas(List<Carga> cargasPendentes) {
+  public String fretarCargas(List<Carga> cargasPendentes) {
     String fretados ="";
+    if (cargasPendentes.isEmpty()){
+      fretados="Não há navios pendentes.";
+    }
     for (Carga c : cargasPendentes) {
       try {
         double distancia = distancias.getDistanciaPortos(c.getIdPortoOrigem(), c.getIdPortoDestino());
@@ -450,9 +469,9 @@ public class App {
     return fretados;
   }
 
-  public void salvarDados() {
+  public String salvarDados() {
+    String pathname = "output/objetosJson.txt";
     try {
-      String pathname = "output/objetosJson.txt";
       streamSaida = new PrintStream(new File(pathname));
       System.setOut(streamSaida);
       Gson gson = new Gson();
@@ -469,9 +488,9 @@ public class App {
       String json6 = gson.toJson(tiposCargas);
       System.out.println(json6);
       System.setOut(standard);
-      System.out.println("Dados salvados com sucesso em: " + pathname);
     } catch (Exception e) {
       e.printStackTrace();
     }
+    return "Dados salvados com sucesso em: " + pathname;
   }
 }

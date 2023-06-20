@@ -52,7 +52,19 @@ public class MainInterface extends JFrame {
             }
         });
         painel.add(fretarCargas);
+        fretarCargas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FretarCarga fc = new FretarCarga(app);
+            }
+        });
         painel.add(salvarDados);
+        salvarDados.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                salvaDado();
+            }
+        });
         painel.add(carregarDados);
         carregarDados.addActionListener(new ActionListener() {
             @Override
@@ -70,5 +82,16 @@ public class MainInterface extends JFrame {
 
         add(painel);
         setVisible(true);
+    }
+    private void salvaDado(){
+        String msg = "";
+        try {
+             msg = app.salvarDados();
+
+        }catch (Exception a){
+            JOptionPane.showMessageDialog(this, a.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        JOptionPane.showMessageDialog(this, msg);
     }
 }

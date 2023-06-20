@@ -7,6 +7,7 @@ import src.com.acmehandel.util.CSVReader;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 
 public class CarregarDado extends JFrame {
@@ -48,7 +49,6 @@ public class CarregarDado extends JFrame {
                     return;
                 }
                 prefixo.setText("");
-                dispose();
             }
         });
         voltar.addActionListener(new ActionListener() {
@@ -63,7 +63,19 @@ public class CarregarDado extends JFrame {
 
     public void readFiles(String filePrefix, Portos portos, Distancias distancias, Frota frota, Clientes clientes,
             TiposCargas tiposCargas, Cargas cargas) {
-        CSVReader filesRead = new CSVReader();
-        filesRead.readFiles(filePrefix, portos, distancias, frota, clientes, tiposCargas, cargas);
+        try {
+            CSVReader filesRead = new CSVReader();
+            if (!filesRead.readFiles(filePrefix, portos, distancias, frota, clientes, tiposCargas, cargas)){
+                throw new FileNotFoundException("Arquivo não encontrado.");
+            }
+            else{
+                JOptionPane.showMessageDialog(CarregarDado.this, "Arquivo carregado com sucesso!");
+                dispose();
+            }
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(CarregarDado.this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
     }
 }

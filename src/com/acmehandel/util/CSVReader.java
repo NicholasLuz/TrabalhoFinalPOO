@@ -9,13 +9,17 @@ public class CSVReader {
   private Scanner entrada = null;
   private String[] nomesArquivos = { "PORTOS", "DISTANCIAS", "NAVIOS", "CLIENTES", "TIPOSCARGAS", "CARGAS" };
 
-  public void readFiles(String filePrefix, Portos portos, Distancias distancias,
+  public boolean readFiles(String filePrefix, Portos portos, Distancias distancias,
       Frota frota, Clientes clientes, TiposCargas tiposCargas, Cargas cargas) {
     try {
       for (String file : nomesArquivos) {
-        BufferedReader streamEntrada = new BufferedReader(
-            new FileReader("resources/csv/" + filePrefix + "-" + file + ".csv"));
-        entrada = new Scanner(streamEntrada);
+        try {
+          BufferedReader streamEntrada = new BufferedReader(
+                  new FileReader("resources/csv/" + filePrefix + "-" + file + ".csv"));
+          entrada = new Scanner(streamEntrada);
+        }catch (FileNotFoundException i){
+          return false;
+        }
         entrada.useLocale(Locale.ENGLISH);
         ArrayList<String> linhas = new ArrayList<>();
         entrada.nextLine();
@@ -48,7 +52,7 @@ public class CSVReader {
     } catch (Exception e) {
       System.out.println(e);
     }
-
+    return true;
   }
 
   private void readPortos(ArrayList<String> linhas, String fileName, Portos portos) {

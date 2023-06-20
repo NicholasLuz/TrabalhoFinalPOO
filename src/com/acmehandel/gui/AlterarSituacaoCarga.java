@@ -11,7 +11,7 @@ import java.util.InputMismatchException;
 
 public class AlterarSituacaoCarga extends JFrame{
     private JTextField codigo;
-    private JButton alterar,voltar;
+    private JButton alterar,voltar, mostrar;
     private ButtonGroup botoesCheck;
     private JRadioButton cancelado, locado, finalizado, pendente;
     private App app;
@@ -41,7 +41,22 @@ public class AlterarSituacaoCarga extends JFrame{
 
 
         painel.add(new JLabel("Selecione a nova situacao: "));
-        painel.add(new JLabel());
+
+        JPanel botaoPainelMostra = new JPanel();
+        botaoPainelMostra.setLayout(new FlowLayout());
+
+        mostrar = new JButton("Mostrar carga digitada");
+        mostrar.setBackground(Color.BLUE);
+        mostrar.setForeground(Color.WHITE);
+        mostrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarCarga();
+            }
+        });
+        botaoPainelMostra.add(mostrar);
+        botaoPainelMostra.setAlignmentY(Component.CENTER_ALIGNMENT);
+        painel.add(botaoPainelMostra);
 
         JPanel painelCheck = new JPanel(new GridLayout(1, 2));
         JPanel painelCheck2 = new JPanel(new GridLayout(1, 2));
@@ -66,9 +81,6 @@ public class AlterarSituacaoCarga extends JFrame{
 
         JPanel botaoPainel = new JPanel();
         botaoPainel.setLayout(new FlowLayout());
-
-        FlowLayout botaoLayout = new FlowLayout();
-        botaoPainel = new JPanel(botaoLayout);
 
         alterar = new JButton("Cadastrar");
         alterar.setBackground(Color.BLUE);
@@ -108,8 +120,28 @@ public class AlterarSituacaoCarga extends JFrame{
         codigo.setText("");
         botoesCheck.clearSelection();
     }
-
+    private void mostrarCarga(){
+        int id = 0;
+        try {
+            if (codigo.getText().isEmpty()) {
+                throw new InputMismatchException("É necessario um codigo para consultar a carga!");
+            }
+            id = Integer.parseInt(codigo.getText());
+            if (!app.getCargas().checkCargaIdJaExiste(id)) {
+                throw new IllegalArgumentException("Não existe carga com este codigo.");
+            }
+            mensagem.setText(app.getCargas().getCargaId(id).toString());
+            mensagem.setVisible(true);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "O campo 'Codigo' só pode conter numeros", "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }catch (IllegalArgumentException x){
+            JOptionPane.showMessageDialog(this, x.getMessage(), "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
     private void alteraCargas() {
+        String msg = "";
         String situ = "";
         int id = 0;
         try {
@@ -131,13 +163,13 @@ public class AlterarSituacaoCarga extends JFrame{
             }
             else{
                 if (cancelado.isSelected()) {
-                    situ = cancelado.getText();
+                    situ = "CANCELADO";
                 } else if (locado.isSelected()) {
-                    situ = locado.getText();
+                    situ = "LOCADO";
                 } else if (finalizado.isSelected()) {
-                    situ = finalizado.getText();
+                    situ = "FINALIZADO";
                 } else if (pendente.isSelected()) {
-                    situ = pendente.getText();
+                    situ = "PENDENTE";
                 }
             }
         } catch (Exception e) {
@@ -148,7 +180,9 @@ public class AlterarSituacaoCarga extends JFrame{
         int opcao = JOptionPane.showConfirmDialog(this, "Deseja confirmar o cadastro?", "Confirmação",
                 JOptionPane.YES_NO_OPTION);
         if (opcao == JOptionPane.YES_OPTION) {
-            mensagem.setText(app.alterarCarga(Integer.parseInt(codigo.getText()),situ));
+            situ.toUpperCase();
+            msg = app.alterarCarga(id,situ);
+            mensagem.setText(msg);
             mensagem.setVisible(true);
 
             limparCampos();
