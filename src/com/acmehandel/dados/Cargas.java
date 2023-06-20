@@ -24,13 +24,11 @@ public class Cargas {
   }
 
   public Carga getCargaId(int id) {
-    if (checkCargaIdJaExiste(id)) {
       for (Carga c : cargas) {
         if (c.getId() == id) {
           return c;
         }
       }
-    }
     return null;
   }
 
@@ -40,14 +38,15 @@ public class Cargas {
     return cargas.add(c);
   }
 
-  public void mostrarCargas() {
+  public String mostrarCargas() {
+    String todasCargas = "";
     for (Carga c : cargas) {
-      System.out.println("--------------------------");
-      System.out.println(c.toString());
+      todasCargas += "--------------------------\n"+ c.toString();
     }
     if (cargas.size() == 0) {
-      System.out.println("Não há cargas cadastradas.");
+      todasCargas = "Não há cargas cadastradas.";
     }
+    return todasCargas;
   }
 
   public void sort() {
@@ -59,4 +58,5 @@ public class Cargas {
         .filter(c -> c.getSituacao().equals(Situacao.PENDENTE.name()))
         .collect(Collectors.toList());
   }
+
 }

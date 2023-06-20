@@ -22,40 +22,28 @@ public class App {
   private PrintStream standard = System.out;
   private PrintStream streamSaida;
 
-  public void executar() {
-    MainInterface gui = new MainInterface(clientes, cargas, distancias, frota, portos, tiposCargas);
+  public Frota getFrota() {
+    return frota;
   }
 
-  public void tratarRespostaMenuGeral(int resposta) {
-    switch (resposta) {
-      case 1:
-        menuAdicionarDado();
-        int resp = escolherOpcaoMenuAdicionarDado();
-        tratarRespostaMenuAdicionarDado(resp);
-        break;
-      case 2:
-        consultarCargas();
-        break;
-      case 3:
-        alterarCarga();
-        break;
-      case 4:
-        fretarCargasPendentes();
-        break;
-      case 5:
-        salvarDados();
-        break;
-      case 6:
-        readFiles();
-        break;
-      case 0:
-        System.out.println("Encerrando o programa");
-        System.exit(0);
-        break;
-      default:
-        System.out.println("Erro inesperado aconteceu. Encerrando o programa.");
-        System.exit(0);
-    }
+  public Cargas getCargas() {
+    return cargas;
+  }
+
+  public Clientes getClientes() {
+    return clientes;
+  }
+
+  public Portos getPortos() {
+    return portos;
+  }
+
+  public Distancias getDistancias() {
+    return distancias;
+  }
+
+  public TiposCargas getTiposCargas() {
+    return tiposCargas;
   }
 
   private void menuAdicionarDado() {
@@ -118,10 +106,7 @@ public class App {
     }
   }
 
-  private void readFiles() {
-    entradaTerminal = new Scanner(System.in);
-    System.out.println("Insira o prefixo dos arquivos a serem lidos: ");
-    String filePrefix = entradaTerminal.nextLine();
+  public void readFiles(String filePrefix) {
     CSVReader filesRead = new CSVReader();
     filesRead.readFiles(filePrefix, portos, distancias, frota, clientes, tiposCargas, cargas);
   }
@@ -340,80 +325,51 @@ public class App {
     }
   }
 
-  public void consultarCargas() {
-    cargas.mostrarCargas();
+  public String consultarCargas() {
+    return cargas.mostrarCargas();
   }
 
-  public void alterarCarga() {
-    try {
-      System.out.println("Digite o id da carga:");
-      int codigo = teclado.nextInt();
-      teclado.nextLine();
+  public String alterarCarga(int codigo, String situacao) {
       Carga c = cargas.getCargaId(codigo);
-      if (c != null) {
-        System.out.println(c.toString());
-        System.out.println("Digite a nova situação da carga:");
-        String situacao = teclado.nextLine();
-        boolean exists = false;
-        String sit = c.getSituacao();
-
-        for (Situacao s : Situacao.values()) {
-          if (situacao.equals(s.name())) {
-            exists = true;
-            break;
-          }
-        }
-
-        if (!exists) {
-          System.out.println("Situação inválida.");
-          return;
-        }
-
-        switch (Situacao.valueOf(sit)) {
-          case FINALIZADO:
-            System.out.println("A carga está finalizada, não pode ser alterada.");
-            break;
-          case CANCELADO:
-            alterarCargaCancelada(situacao, c);
-            break;
-          case PENDENTE:
-            alterarCargaPendente(situacao, c);
-            break;
-          case LOCADO:
-            alterarCargaLocada(situacao, c);
-            break;
-          default:
-            break;
-        }
-      } else {
-        System.out.println("NAO EXISTEM CARGAS COM ESTE IDENTIFICADOR");
+      String sit = c.getSituacao();
+      switch (Situacao.valueOf(sit)) {
+        case FINALIZADO:
+          return "A carga está finalizada, não pode ser alterada.";
+        case CANCELADO:
+          return alterarCargaCancelada(situacao, c);
+        case PENDENTE:
+          return alterarCargaPendente(situacao, c);
+        case LOCADO:
+          return alterarCargaLocada(situacao, c);
+        default:
+          break;
       }
-    } catch (InputMismatchException e) {
-      System.out.println("Input inválido.");
-    }
+      return "NAO EXISTEM CARGAS COM ESTE IDENTIFICADOR";
   }
 
-  public void alterarCargaCancelada(String sit, Carga c) {
+  public String alterarCargaCancelada(String sit, Carga c) {
     if (sit.equals(Situacao.PENDENTE.name())) {
       c.setSituacao(sit);
     } else if (sit.equals(Situacao.LOCADO.name())) {
-      fretarCargaEspecifica(c.getId());
+      return "Para alterar a situação para LOCADO, é necessário alocar todos os pedidos pendentes: " + fretarCargaEspecifica(c.getId());
     } else {
-      System.out.println("Não foi possível alterar a situação da carga.");
+      return "Não foi possível alterar a situação da carga. Situação da carga atual: "+c.getSituacao();
     }
+    return ("A carga "+c.getId()+" foi alterada para " + c.getSituacao());
   }
 
-  public void alterarCargaPendente(String sit, Carga c) {
+  public String alterarCargaPendente(String sit, Carga c) {
     if (sit.equals(Situacao.CANCELADO.name())) {
       c.setSituacao(sit);
     } else if (sit.equals(Situacao.LOCADO.name())) {
-      fretarCargaEspecifica(c.getId());
+      return "Para alterar a situação para LOCADO, é necessário alocar todos os pedidos pendentes: " + fretarCargaEspecifica(c.getId());
     } else {
-      System.out.println("Não foi possível alterar a situação da carga.");
+      return "Não foi possível alterar a situação da carga. Situação da carga atual: "+c.getSituacao();
     }
+    return ("A carga "+c.getId()+"foi alterada para " + c.getSituacao());
   }
 
-  public void alterarCargaLocada(String sit, Carga c) {
+  public String alterarCargaLocada(String sit, Carga c) {
     if (sit.equals(Situacao.CANCELADO.name())) {
       c.setSituacao(sit);
       String nomeNav = c.getNomeNavio();
@@ -430,9 +386,8 @@ public class App {
       String nomeNav = c.getNomeNavio();
       Navio n = frota.getNavioNome(nomeNav);
       n.setIsTransportingFalse();
-    } else {
-      System.out.println("Não foi possível alterar a situação da carga.");
     }
+    return ("A carga "+c.getId()+"foi alterada para " + c.getSituacao());
   }
 
   public void fretarCargasPendentes() {
@@ -441,22 +396,23 @@ public class App {
     fretarCargas(cargasPendentes);
   }
 
-  public void fretarCargaEspecifica(int codigo) {
+  public String fretarCargaEspecifica(int codigo) {
     Carga c = cargas.getCargaId(codigo);
     ArrayList<Carga> cargasP = new ArrayList<Carga>();
     cargasP.add(c);
     List<Carga> cargasPendentes = cargasP.stream().collect(Collectors.toList());
 
-    fretarCargas(cargasPendentes);
+    return fretarCargas(cargasPendentes);
   }
 
-  private void fretarCargas(List<Carga> cargasPendentes) {
+  private String fretarCargas(List<Carga> cargasPendentes) {
+    String fretados ="";
     for (Carga c : cargasPendentes) {
       try {
         double distancia = distancias.getDistanciaPortos(c.getIdPortoOrigem(), c.getIdPortoDestino());
 
         if (distancia == -1) {
-          System.out.println("Distância entre portos não cadastrada, ou código de portos inválidos.");
+          fretados +=("Carga: "+c.getId()+" - Distância entre portos não cadastrada, ou código de portos inválidos.");
           continue;
         }
         double precoPeso = tiposCargas.getPrecoPeso(c.getIdTipoCarga(), c.getPeso(),
@@ -467,16 +423,14 @@ public class App {
         boolean haNavioAutonomia = frota.haNavioAutonomia(distancia);
         if (!haNavioAutonomia) {
           c.setSituacao(Situacao.CANCELADO.name());
-          System.out.println(
-              "Não há navios com autonomia suficiente para realizar o transporte da carga de id: " + c.getId());
+          fretados +=("Não há navios com autonomia suficiente para realizar o transporte da carga de id: " + c.getId()+"\n");
           continue;
         }
 
         Navio melhorNavio = frota.getMelhorNavio(c.getPrioridade(), distancia);
 
         if (melhorNavio == null) {
-          System.out
-              .println("Não há navios que possam realizar o transporte da carga de id: " + c.getId() + " no momento.");
+          fretados +=("Não há navios que possam realizar o transporte da carga de id: " + c.getId() + " no momento.\n");
           continue;
         }
 
@@ -487,12 +441,13 @@ public class App {
         double valorFrete = (distancia * custoAjustado) + precoPeso + precoRegiao;
         c.alocarNavio(melhorNavio, valorFrete);
         melhorNavio.setIsTransportingTrue();
-        System.out.println("Navio " + melhorNavio.getNome() + " designado para carga " + c.getId());
+        fretados +=("Navio " + melhorNavio.getNome() + " designado para carga " + c.getId()+"\n");
 
       } catch (Exception e) {
-        System.out.println("Erro.");
+        return "Erro.";
       }
     }
+    return fretados;
   }
 
   public void salvarDados() {

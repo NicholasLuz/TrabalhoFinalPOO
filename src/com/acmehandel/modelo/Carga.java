@@ -99,8 +99,8 @@ public class Carga {
   public String toString() {
     return ("Id: " + identificador + "\nPorto de Origem: " + idPortoOrigem + "\nPorto de Destino: " + idPortoDestino
         + "\nCliente: " + idCliente + "\nTipo de Carga: " + idTipoCarga + "\nSituação: " + situacao
-        + ((navio != null) ? ("\nNavio: " + navio.toString() + "\nValor do frete: " + valorFrete)
-            : "\nNão há navios designados para esta carga."));
+        + ((navio != null) ? ("\nNavio: " + navio.toString() + "\nValor do frete: " + valorFrete+"\n")
+            : "\nNão há navios designados para esta carga.\n"));
   }
 
 }
