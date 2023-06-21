@@ -106,7 +106,6 @@ public class FormularioCarga extends JFrame {
         botaoPainel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
-        botaoLimpar.setForeground(Color.RED);
         botaoLimpar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 limparCampos();
@@ -115,8 +114,6 @@ public class FormularioCarga extends JFrame {
         botaoPainel.add(botaoLimpar);
 
         botaoSair = new JButton("Sair");
-        botaoSair.setBackground(Color.BLACK);
-        botaoSair.setForeground(Color.WHITE);
         botaoSair.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();

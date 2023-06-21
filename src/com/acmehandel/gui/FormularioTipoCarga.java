@@ -230,7 +230,6 @@ public class FormularioTipoCarga extends JFrame {
         botaoPainel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
-        botaoLimpar.setForeground(Color.RED);
         botaoPainel.add(botaoLimpar);
 
         botaoLimpar.addActionListener(new ActionListener() {
@@ -243,8 +242,6 @@ public class FormularioTipoCarga extends JFrame {
         botaoPainel.add(botaoLimpar);
 
         botaoSair = new JButton("Sair");
-        botaoSair.setBackground(Color.WHITE);
-        botaoSair.setForeground(Color.BLACK);
         botaoPainel.add(botaoSair);
 
         botaoSair.addActionListener(new ActionListener() {

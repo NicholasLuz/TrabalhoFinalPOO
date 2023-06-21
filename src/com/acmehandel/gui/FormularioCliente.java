@@ -72,7 +72,6 @@ public class FormularioCliente extends JFrame {
     botaoPainel.add(botaoMostrarCadastrados);
 
     botaoLimpar = new JButton("Limpar");
-    botaoLimpar.setForeground(Color.RED);
     botaoLimpar.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         limparCampos();
@@ -81,8 +80,6 @@ public class FormularioCliente extends JFrame {
     botaoPainel.add(botaoLimpar);
 
     botaoSair = new JButton("Sair");
-    botaoSair.setBackground(Color.BLACK);
-    botaoSair.setForeground(Color.WHITE);
     botaoSair.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         dispose();
@@ -96,7 +93,7 @@ public class FormularioCliente extends JFrame {
 
     mensagem = new JLabel();
     mensagem.setHorizontalAlignment(JLabel.CENTER);
-    mensagem.setForeground(Color.BLUE);
+    mensagem.setForeground(Color.RED);
     mensagem.setFont(new Font("Arial", Font.BOLD, 13));
     mensagem.setVisible(false);
     add(mensagem, BorderLayout.NORTH);
@@ -120,23 +117,28 @@ public class FormularioCliente extends JFrame {
       if (nome1.isEmpty() || codigo1.isEmpty() || email1.isEmpty()) {
         throw new InputMismatchException("Preencha todos os campos!");
       }
-      if (clientes.checkCodClienteJaExiste(Integer.parseInt(codigo1))) {
-        throw new IllegalArgumentException("Já existe um cliente com este codigo.");
+      try {
+        Integer.parseInt(codigo1);
+        if (Integer.parseInt(codigo1) <= 0) {
+          throw new IllegalArgumentException("O campo 'Codigo' precisa ser um numero inteiro positivo");
+        }
+        if (clientes.checkCodClienteJaExiste(Integer.parseInt(codigo1))) {
+          throw new IllegalArgumentException("Já existe um cliente com este codigo.");
+        }
+        }catch (NumberFormatException x){
+        JOptionPane.showMessageDialog(this,"O campo 'Codigo' só pode conter números.", "Erro",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+        }catch (Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage(), "Erro",
+            JOptionPane.ERROR_MESSAGE);
+        return;
       }
       if (clientes.checkEmailClienteJaExiste(email1)) {
-        throw new IllegalArgumentException("Já existe um cliente com este codigo.");
+        throw new IllegalArgumentException("Já existe um cliente com este e-mail.");
       }
       if (!email1.contains("@")) {
         throw new IllegalArgumentException("O e-mail precisa possuir o caractere '@' .");
-      }
-      try {
-        if (Integer.parseInt(codigo1) <= 0) {
-          throw new NumberFormatException("O campo 'Codigo' precisa ser um numero inteiro positivo");
-        }
-      } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "O campo 'Codigo' só pode conter numeros", "Erro",
-            JOptionPane.ERROR_MESSAGE);
-        return;
       }
     } catch (Exception e) {
       JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
