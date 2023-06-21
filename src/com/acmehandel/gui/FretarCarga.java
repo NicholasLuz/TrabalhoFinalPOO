@@ -13,9 +13,9 @@ public class FretarCarga extends JFrame {
     public FretarCarga(App app) {
         super();
         this.app = app;
-        setTitle("Consultar cargas");
+        setTitle("Fretar cargas");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500,800);
+        setSize(500,400);
 
         JTextArea areaTexto = new JTextArea(app.fretarCargasPendentes());
         areaTexto.setEditable(false);

@@ -57,8 +57,6 @@ public class FormularioPorto extends JFrame {
         botaoPainel = new JPanel(botaoLayout);
 
         botaoCadastrar = new JButton("Cadastrar");
-        botaoCadastrar.setBackground(Color.BLUE);
-        botaoCadastrar.setForeground(Color.WHITE);
         botaoCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,8 +66,6 @@ public class FormularioPorto extends JFrame {
         botaoPainel.add(botaoCadastrar);
 
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
-        botaoMostrarCadastrados.setBackground(Color.BLUE);
-        botaoMostrarCadastrados.setForeground(Color.WHITE);
         botaoMostrarCadastrados.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String todosCadastrados = portos.mostrarPortos();
@@ -79,8 +75,7 @@ public class FormularioPorto extends JFrame {
         botaoPainel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
-        botaoLimpar.setBackground(Color.BLUE);
-        botaoLimpar.setForeground(Color.YELLOW);
+        botaoLimpar.setForeground(Color.RED);
         botaoLimpar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -151,8 +146,8 @@ public class FormularioPorto extends JFrame {
         if (opcao == JOptionPane.YES_OPTION) {
             Porto p = new Porto(Integer.parseInt(codigo1),nome1,pais1);
             portos.adicionaPorto(p);
-            portos.sort();
             app.adicionaDistanciaPortos(p);
+            portos.sort();
             mensagem.setText(
                     "Botão 'Enviar' pressionado: " + "Código: " + codPorto.getText() + ", Nome: " + nome.getText() +
                             "Pais: " + pais.getText());

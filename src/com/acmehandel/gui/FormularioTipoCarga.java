@@ -200,7 +200,7 @@ public class FormularioTipoCarga extends JFrame {
         janelaPrincipal.add(painel, BorderLayout.CENTER);
 
         mensagem.setHorizontalAlignment(JLabel.CENTER);
-        mensagem.setForeground(Color.BLUE);
+        mensagem.setForeground(Color.RED);
         mensagem.setFont(new Font("Arial", Font.BOLD, 13));
         add(mensagem, BorderLayout.NORTH);
         setVisible(true);
@@ -214,8 +214,6 @@ public class FormularioTipoCarga extends JFrame {
         botaoPainel = new JPanel(botaoLayout);
 
         botaoCadastrar = new JButton("Cadastrar");
-        botaoCadastrar.setBackground(Color.BLUE);
-        botaoCadastrar.setForeground(Color.BLACK);
         botaoCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cadastrarTipoCarga();
@@ -225,8 +223,6 @@ public class FormularioTipoCarga extends JFrame {
         botaoPainel.add(botaoCadastrar);
 
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
-        botaoMostrarCadastrados.setBackground(Color.BLUE);
-        botaoMostrarCadastrados.setForeground(Color.BLACK);
         botaoMostrarCadastrados.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String todosCadastrados = tiposCargas.mostrarTiposCargas();
@@ -236,8 +232,7 @@ public class FormularioTipoCarga extends JFrame {
         botaoPainel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
-        botaoLimpar.setBackground(Color.BLUE);
-        botaoLimpar.setForeground(Color.YELLOW);
+        botaoLimpar.setForeground(Color.RED);
         botaoPainel.add(botaoLimpar);
 
         botaoLimpar.addActionListener(new ActionListener() {

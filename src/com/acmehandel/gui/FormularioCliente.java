@@ -54,8 +54,6 @@ public class FormularioCliente extends JFrame {
     mensagem = new JLabel();
 
     botaoCadastrar = new JButton("Cadastrar");
-    botaoCadastrar.setBackground(Color.BLUE);
-    botaoCadastrar.setForeground(Color.WHITE);
     botaoCadastrar.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -65,8 +63,6 @@ public class FormularioCliente extends JFrame {
     botaoPainel.add(botaoCadastrar);
 
     botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
-    botaoMostrarCadastrados.setBackground(Color.BLUE);
-    botaoMostrarCadastrados.setForeground(Color.WHITE);
     botaoMostrarCadastrados.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         String todosCadastrados = clientes.mostrarClientes();
@@ -76,8 +72,7 @@ public class FormularioCliente extends JFrame {
     botaoPainel.add(botaoMostrarCadastrados);
 
     botaoLimpar = new JButton("Limpar");
-    botaoLimpar.setBackground(Color.BLUE);
-    botaoLimpar.setForeground(Color.YELLOW);
+    botaoLimpar.setForeground(Color.RED);
     botaoLimpar.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         limparCampos();

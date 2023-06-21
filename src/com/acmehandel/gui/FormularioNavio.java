@@ -56,8 +56,6 @@ public class FormularioNavio extends JFrame {
         buttonPanel.setLayout(new FlowLayout());
 
         botaoCadastrar = new JButton("Cadastrar");
-        botaoCadastrar.setBackground(Color.BLUE);
-        botaoCadastrar.setForeground(Color.WHITE);
         botaoCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cadastrarNavio();
@@ -66,8 +64,6 @@ public class FormularioNavio extends JFrame {
         buttonPanel.add(botaoCadastrar);
 
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
-        botaoMostrarCadastrados.setBackground(Color.BLUE);
-        botaoMostrarCadastrados.setForeground(Color.WHITE);
         botaoMostrarCadastrados.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String todosCadastrados = frota.mostrarNavios();
@@ -77,8 +73,7 @@ public class FormularioNavio extends JFrame {
         buttonPanel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
-        botaoLimpar.setBackground(Color.BLUE);
-        botaoLimpar.setForeground(Color.YELLOW);
+        botaoLimpar.setForeground(Color.RED);
         botaoLimpar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 limparCampos();
@@ -102,7 +97,7 @@ public class FormularioNavio extends JFrame {
 
         mensagemUsuario = new JLabel();
         mensagemUsuario.setHorizontalAlignment(JLabel.CENTER);
-        mensagemUsuario.setForeground(Color.BLUE);
+        mensagemUsuario.setForeground(Color.RED);
         mensagemUsuario.setFont(new Font("Arial", Font.BOLD, 13));
         mensagemUsuario.setVisible(false);
         add(mensagemUsuario, BorderLayout.NORTH);

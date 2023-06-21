@@ -82,7 +82,7 @@ public class AlterarSituacaoCarga extends JFrame{
         JPanel botaoPainel = new JPanel();
         botaoPainel.setLayout(new FlowLayout());
 
-        alterar = new JButton("Cadastrar");
+        alterar = new JButton("Alterar");
         alterar.setBackground(Color.BLUE);
         alterar.setForeground(Color.WHITE);
         alterar.addActionListener(new ActionListener() {
@@ -135,7 +135,7 @@ public class AlterarSituacaoCarga extends JFrame{
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "O campo 'Codigo' só pode conter numeros", "Erro",
                     JOptionPane.ERROR_MESSAGE);
-        }catch (IllegalArgumentException x){
+        }catch (Exception x){
             JOptionPane.showMessageDialog(this, x.getMessage(), "Erro",
                     JOptionPane.ERROR_MESSAGE);
         }

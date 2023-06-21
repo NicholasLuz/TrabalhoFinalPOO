@@ -149,13 +149,15 @@ public class App {
         if (p.getId() != portos.getPortoId(i).getId()) {
           int idOrigem = p.getId();
           int idDestino = portos.getPortoId(i).getId();
-          if (idOrigem > idDestino) {
+          Distancia d = new Distancia(idOrigem, idDestino, 100.0);
+          distancias.adicionaDistancias(d);
+          if (distancias.checkDistanciaJaExiste(idOrigem,idDestino) && !distancias.checkDistanciaJaExiste(idDestino,idOrigem) ) {
             int aux = idOrigem;
             idOrigem = idDestino;
             idDestino = aux;
+            Distancia d2 = new Distancia(idOrigem, idDestino, 100.0);
+            distancias.adicionaDistancias(d2);
           }
-          Distancia d = new Distancia(idOrigem, idDestino, 100.0);
-          distancias.adicionaDistancias(d);
         }
       }
     }
@@ -469,8 +471,7 @@ public class App {
     return fretados;
   }
 
-  public String salvarDados() {
-    String pathname = "output/objetosJson.txt";
+  public String salvarDados(String pathname) {
     try {
       streamSaida = new PrintStream(new File(pathname));
       System.setOut(streamSaida);

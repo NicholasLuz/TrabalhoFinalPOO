@@ -10,7 +10,7 @@ public class Distancias {
     this.distancias = new ArrayList<Distancia>();
   }
 
-  private boolean checkDistanciaJaExiste(int idOrigem, int idDestino) {
+  public boolean checkDistanciaJaExiste(int idOrigem, int idDestino) {
     for (Distancia d : distancias) {
       if ((d.getIdOrigem() == idOrigem) && (d.getIdDestino() == idDestino)) {
         return true;
@@ -34,13 +34,15 @@ public class Distancias {
     return -1;
   }
 
-  public void mostrarDistancias() {
+  public String mostrarDistancias() {
+    String dist = "";
     for (Distancia d : distancias) {
-      System.out.println(
-          "IdOrigem: " + d.getIdOrigem() + ";IdDestino: " + d.getIdDestino() + ";Distancia: " + d.getDistancia());
+      dist +=(
+          "IdOrigem: " + d.getIdOrigem() + ";IdDestino: " + d.getIdDestino() + ";Distancia: " + d.getDistancia()+"\n");
     }
     if (distancias.size() == 0) {
-      System.out.println("Não há distâncias cadastradas.");
+      dist = ("Não há distâncias cadastradas.");
     }
+    return dist;
   }
 }

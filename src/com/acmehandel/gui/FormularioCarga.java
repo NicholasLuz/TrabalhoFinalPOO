@@ -89,8 +89,6 @@ public class FormularioCarga extends JFrame {
         botaoPainel = new JPanel(botaoLayout);
 
         botaoCadastrar = new JButton("Cadastrar");
-        botaoCadastrar.setBackground(Color.BLUE);
-        botaoCadastrar.setForeground(Color.WHITE);
         botaoCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 cadastrarCarga();
@@ -99,8 +97,6 @@ public class FormularioCarga extends JFrame {
         botaoPainel.add(botaoCadastrar);
 
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
-        botaoMostrarCadastrados.setBackground(Color.BLUE);
-        botaoMostrarCadastrados.setForeground(Color.WHITE);
         botaoMostrarCadastrados.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String todosCadastrados = cargas.mostrarCargas2();
@@ -110,8 +106,7 @@ public class FormularioCarga extends JFrame {
         botaoPainel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
-        botaoLimpar.setBackground(Color.BLUE);
-        botaoLimpar.setForeground(Color.YELLOW);
+        botaoLimpar.setForeground(Color.RED);
         botaoLimpar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 limparCampos();
@@ -135,7 +130,7 @@ public class FormularioCarga extends JFrame {
 
         mensagem = new JLabel();
         mensagem.setHorizontalAlignment(JLabel.CENTER);
-        mensagem.setForeground(Color.BLUE);
+        mensagem.setForeground(Color.RED);
         mensagem.setFont(new Font("Arial", Font.BOLD, 13));
         mensagem.setVisible(false);
         add(mensagem, BorderLayout.NORTH);
@@ -145,6 +140,9 @@ public class FormularioCarga extends JFrame {
 
     private void limparCampos() {
         id.setText("");
+        idCliente.setText("");
+        portoDestino.setText("");
+        portoOrigem.setText("");
         valorDeclarado.setText("");
         tipoCarga.setText("");
         tempoMaximo.setText("");

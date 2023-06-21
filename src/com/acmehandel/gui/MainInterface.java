@@ -62,14 +62,14 @@ public class MainInterface extends JFrame {
         salvarDados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                salvaDado();
+                SalvarDados sd = new SalvarDados(app);
             }
         });
         painel.add(carregarDados);
         carregarDados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarregarDado cd = new CarregarDado(app.getClientes(),app.getCargas(), app.getDistancias(),app.getFrota(),app.getPortos(),app.getTiposCargas());
+                CarregarDado cd = new CarregarDado(app.getClientes(), app.getCargas(), app.getDistancias(), app.getFrota(), app.getPortos(), app.getTiposCargas());
             }
         });
         painel.add(sair);
@@ -82,16 +82,5 @@ public class MainInterface extends JFrame {
 
         add(painel);
         setVisible(true);
-    }
-    private void salvaDado(){
-        String msg = "";
-        try {
-             msg = app.salvarDados();
-
-        }catch (Exception a){
-            JOptionPane.showMessageDialog(this, a.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        JOptionPane.showMessageDialog(this, msg);
     }
 }
