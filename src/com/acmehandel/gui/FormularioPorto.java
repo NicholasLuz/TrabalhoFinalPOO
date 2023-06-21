@@ -1,4 +1,7 @@
 package src.com.acmehandel.gui;
+import src.app.App;
+import src.com.acmehandel.dados.*;
+import src.com.acmehandel.modelo.Porto;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +13,13 @@ public class FormularioPorto extends JFrame {
     private JTextField codPorto, nome, pais;
     private JButton botaoCadastrar, botaoMostrarCadastrados, botaoSair, botaoLimpar;
     private JLabel mensagem;
+    private Portos portos;
+    private App app;
 
-    public FormularioPorto() {
+    public FormularioPorto(Portos portos, App app) {
         super();
+        this.portos = portos;
+        this.app = app;
         JPanel janelaPrincipal = new JPanel();
         janelaPrincipal.setLayout(new BorderLayout());
         setTitle("Cadastro de Portos");
@@ -63,6 +70,12 @@ public class FormularioPorto extends JFrame {
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
         botaoMostrarCadastrados.setBackground(Color.BLUE);
         botaoMostrarCadastrados.setForeground(Color.WHITE);
+        botaoMostrarCadastrados.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String todosCadastrados = portos.mostrarPortos();
+                JOptionPane.showMessageDialog(null, todosCadastrados);
+            }
+        });
         botaoPainel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
@@ -116,17 +129,15 @@ public class FormularioPorto extends JFrame {
             if (nome1.isEmpty() || codigo1.isEmpty() || pais1.isEmpty()) {
                 throw new InputMismatchException("Preencha todos os campos!");
             }
-            /*
-             * if (codigo ja existe) {
-             * throw new IllegalArgumentException("Já existe um porto com este codigo.");
-             * }
-             */
             try {
                 if (Integer.parseInt(codigo1) <= 0) {
                     throw new NumberFormatException("O campo 'Codigo' precisa ser um numero inteiro positivo");
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "O campo 'Codigo' só pode conter numeros", "Erro",
+                if(portos.checkPortoIdJaExiste(Integer.parseInt(codigo1))){
+                    throw new IllegalArgumentException("Ja existe porto cadastrado com este codigo!");
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage(), "Erro",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -138,10 +149,10 @@ public class FormularioPorto extends JFrame {
         int opcao = JOptionPane.showConfirmDialog(this, "Deseja confirmar o cadastro?", "Confirmação",
                 JOptionPane.YES_NO_OPTION);
         if (opcao == JOptionPane.YES_OPTION) {
-            /*
-             * cadastrados.novoNavio(nome,Double.parseDouble(velocidade),Double.parseDouble(
-             * autonomia), Double.parseDouble(custoPorMilhaBasico));
-             */
+            Porto p = new Porto(Integer.parseInt(codigo1),nome1,pais1);
+            portos.adicionaPorto(p);
+            portos.sort();
+            app.adicionaDistanciaPortos(p);
             mensagem.setText(
                     "Botão 'Enviar' pressionado: " + "Código: " + codPorto.getText() + ", Nome: " + nome.getText() +
                             "Pais: " + pais.getText());

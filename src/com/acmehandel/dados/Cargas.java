@@ -37,6 +37,16 @@ public class Cargas {
       return false;
     return cargas.add(c);
   }
+  public String mostrarCargas2() {
+    String todasCargas = "";
+    for (Carga c : cargas) {
+      todasCargas += c.toString() +"\n";
+    }
+    if (cargas.size() == 0) {
+      todasCargas = "Não há cargas cadastradas.";
+    }
+    return todasCargas;
+  }
 
   public String mostrarCargas() {
     String todasCargas = "";

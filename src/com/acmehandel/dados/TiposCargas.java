@@ -41,14 +41,15 @@ public class TiposCargas {
     return tiposCargas.add(tc);
   }
 
-  public void mostrarTiposCargas() {
+  public String mostrarTiposCargas() {
+    String printTiposCargas ="";
     for (TipoCarga tc : tiposCargas) {
-      System.out.println(
-          "Numero: " + tc.getNumero() + ";Descricao: " + tc.getDescricao());
+      printTiposCargas +=("Numero: " + tc.getNumero() + ";Descricao: " + tc.getDescricao() +"\n");
     }
     if (tiposCargas.size() == 0) {
-      System.out.println("Não há tipos de cargas cadastrados.");
+      printTiposCargas = "Não há tipos de cargas cadastrados.";
     }
+    return printTiposCargas;
   }
 
   public void sort() {

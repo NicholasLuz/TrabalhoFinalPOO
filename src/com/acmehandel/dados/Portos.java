@@ -48,13 +48,15 @@ public class Portos {
     return portos.get(index);
   }
 
-  public void mostrarPortos() {
+  public String mostrarPortos() {
+    String printPortos ="";
     for (Porto p : portos) {
-      System.out.println("Id: " + p.getId() + ";Nome: " + p.getNome() + ";País: " + p.getPais());
+      printPortos += ("Id: " + p.getId() + ";Nome: " + p.getNome() + ";País: " + p.getPais()+"\n");
     }
     if (portos.size() == 0) {
-      System.out.println("Não há portos cadastrados.");
+      printPortos = "Não há portos cadastrados.";
     }
+    return printPortos;
   }
 
   public int size() {

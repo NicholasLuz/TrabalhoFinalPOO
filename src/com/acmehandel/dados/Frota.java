@@ -65,15 +65,17 @@ public class Frota {
     return frota.add(n);
   }
 
-  public void mostrarNavios() {
+  public String mostrarNavios() {
+    String nomesNavios ="";
     for (Navio n : frota) {
-      System.out.println(
+      nomesNavios +=(
           "Nome: " + n.getNome() + ";Velocidade: " + n.getVelocidade() + ";Autonomia: " + n.getAutonomia()
-              + ";CustoMilhaBasico: " + n.getCustoPorMilhaBasico());
+              + ";CustoMilhaBasico: " + n.getCustoPorMilhaBasico() +"\n");
     }
     if (frota.size() == 0) {
-      System.out.println("Não há navios cadastrados.");
+      nomesNavios = ("Não há navios cadastrados.");
     }
+    return nomesNavios;
   }
 
   public void sort() {

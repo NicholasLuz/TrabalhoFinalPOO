@@ -34,7 +34,7 @@ public class MainInterface extends JFrame {
         cadastrarNovoDado.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CadastrarDado(app.getClientes(),app.getCargas(), app.getDistancias(),app.getFrota(),app.getPortos(),app.getTiposCargas());
+                new CadastrarDado(app);
             }
         });
         painel.add(consultarCargas);

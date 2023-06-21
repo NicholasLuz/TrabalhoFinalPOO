@@ -1,5 +1,6 @@
 package src.com.acmehandel.gui;
 
+import src.app.App;
 import src.com.acmehandel.dados.*;
 
 import javax.swing.*;
@@ -10,8 +11,7 @@ import java.awt.event.ActionListener;
 public class CadastrarDado extends JFrame {
     private JButton ok, voltar;
 
-    public CadastrarDado(Clientes clientes, Cargas cargas, Distancias distancias, Frota frota, Portos portos,
-            TiposCargas tiposCargas) {
+    public CadastrarDado(App app) {
         super("Cadastrar dado");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(300, 200);
@@ -29,23 +29,23 @@ public class CadastrarDado extends JFrame {
                 String selecionado = (String) dropdown.getSelectedItem();
                 switch (selecionado) {
                     case "Cliente":
-                        new FormularioCliente(clientes);
+                        new FormularioCliente(app.getClientes());
                         dispose();
                         break;
                     case "Navio":
-                        new FormularioNavio();
+                        new FormularioNavio(app.getFrota());
                         dispose();
                         break;
                     case "Porto":
-                        new FormularioPorto();
+                        new FormularioPorto(app.getPortos(), app);
                         dispose();
                         break;
                     case "Carga":
-                        new FormularioCarga();
+                        new FormularioCarga(app.getCargas());
                         dispose();
                         break;
                     case "Tipo de Carga":
-                        new FormularioTipoCarga();
+                        new FormularioTipoCarga(app.getTiposCargas());
                         dispose();
                         break;
                 }

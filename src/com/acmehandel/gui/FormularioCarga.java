@@ -1,4 +1,6 @@
 package src.com.acmehandel.gui;
+import src.com.acmehandel.dados.*;
+import src.com.acmehandel.modelo.Carga;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,20 +9,22 @@ import java.awt.event.ActionListener;
 import java.util.InputMismatchException;
 
 public class FormularioCarga extends JFrame {
-    private JTextField id, peso, valorDeclarado, tempoMaximo, tipoCarga;
+    private JTextField id,idCliente,portoOrigem,portoDestino, peso, valorDeclarado, tempoMaximo, tipoCarga;
     private JRadioButton barato, rapido;
     private ButtonGroup botoesCheck;
     private JButton botaoCadastrar, botaoMostrarCadastrados, botaoSair, botaoLimpar;
     private JLabel mensagem;
+    private Cargas cargas;
 
-    public FormularioCarga() {
+    public FormularioCarga(Cargas cargas) {
         super();
+        this.cargas = cargas;
         JPanel janelaPrincipal = new JPanel();
         janelaPrincipal.setLayout(new BorderLayout());
         setTitle("Cadastro de Cargas");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(650, 300);
-        GridLayout gridCampos = new GridLayout(7, 2);
+        GridLayout gridCampos = new GridLayout(10, 2);
         setLocationRelativeTo(null);
         JPanel painel = new JPanel();
         painel.setLayout(gridCampos);
@@ -33,6 +37,18 @@ public class FormularioCarga extends JFrame {
         painel.add(new JLabel("Codigo identificador da carga:"));
         id = new JTextField();
         painel.add(id);
+
+        painel.add(new JLabel("Codigo identificador do cliente:"));
+        idCliente = new JTextField();
+        painel.add(idCliente);
+
+        painel.add(new JLabel("Codigo identificador do porto de origem:"));
+        portoOrigem = new JTextField();
+        painel.add(portoOrigem);
+
+        painel.add(new JLabel("Codigo identificador do porto de destino:"));
+        portoDestino = new JTextField();
+        painel.add(portoDestino);
 
         painel.add(new JLabel("Peso da carga:"));
         peso = new JTextField();
@@ -85,6 +101,12 @@ public class FormularioCarga extends JFrame {
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
         botaoMostrarCadastrados.setBackground(Color.BLUE);
         botaoMostrarCadastrados.setForeground(Color.WHITE);
+        botaoMostrarCadastrados.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String todosCadastrados = cargas.mostrarCargas2();
+                JOptionPane.showMessageDialog(null, todosCadastrados);
+            }
+        });
         botaoPainel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
@@ -136,24 +158,29 @@ public class FormularioCarga extends JFrame {
             if (!rapido.isSelected() && !barato.isSelected()) {
                 throw new InputMismatchException("Preencha todos os campos!");
             }
-            if (id.getText().isEmpty() || peso.getText().isEmpty() || valorDeclarado.getText().isEmpty()
+            if (id.getText().isEmpty() || idCliente.getText().isEmpty() || portoDestino.getText().isEmpty() || portoOrigem.getText().isEmpty()
+                    || peso.getText().isEmpty() || valorDeclarado.getText().isEmpty()
                     || tempoMaximo.getText().isEmpty() || tipoCarga.getText().isEmpty()) {
                 throw new InputMismatchException("Preencha todos os campos!");
             }
-            /*
-             * if (numero ja existe) {
-             * throw new IllegalArgumentException("Já existe uma carga com este codigo.");
-             * }
-             * if (!tipocarga){
-             * throw new
-             * IllegalArgumentException("Não existe tipo de carga com este codigo.");
-             * }
-             */
 
             try {
-                Integer.parseInt(id.getText());
+                if (cargas.checkCargaIdJaExiste(Integer.parseInt(id.getText()))){
+                    throw new IllegalArgumentException("Já existe uma carga com este codigo.");
+                }
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "O campo 'Codigo' só pode conter numeros", "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }catch (IllegalArgumentException f){
+                JOptionPane.showMessageDialog(this, f.getMessage(), "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            try {
+                Integer.parseInt(portoOrigem.getText());
+                Integer.parseInt(portoDestino.getText());
+            }catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Os campos 'Porto' só podem conter numeros", "Erro",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -193,7 +220,8 @@ public class FormularioCarga extends JFrame {
                 return;
             }
             msg = ("Botão 'Enviar' pressionado: " +
-                    "Código: " + id.getText() + ", Peso: " + peso.getText() +
+                    "Código: " + id.getText()+" Cliente: "+idCliente.getText()+"Porto de origem: "+portoOrigem.getText()+
+                    " Porto de destino: "+portoDestino.getText()+ ", Peso: " + peso.getText() +
                     "Valor Declarado: " + valorDeclarado.getText() + ", Tempo maximo: " + tempoMaximo.getText()
                     + ", Tipo de carga: " + tipoCarga.getText()
                     + "Prioridade: ");
@@ -208,6 +236,17 @@ public class FormularioCarga extends JFrame {
         int opcao = JOptionPane.showConfirmDialog(this, "Deseja confirmar o cadastro?", "Confirmação",
                 JOptionPane.YES_NO_OPTION);
         if (opcao == JOptionPane.YES_OPTION) {
+            if (rapido.isSelected()){
+                cargas.adicionaCarga(new Carga(Integer.parseInt(id.getText()), Integer.parseInt(idCliente.getText()),Integer.parseInt(portoOrigem.getText()),
+                        Integer.parseInt(portoDestino.getText()),Integer.parseInt(peso.getText()), Double.parseDouble(valorDeclarado.getText()),
+                        Integer.parseInt(tempoMaximo.getText()),Integer.parseInt(tipoCarga.getText()), rapido.getText(), "PENDENTE"));
+            }
+            else{
+                cargas.adicionaCarga(new Carga(Integer.parseInt(id.getText()), Integer.parseInt(idCliente.getText()),Integer.parseInt(portoOrigem.getText()),
+                        Integer.parseInt(portoDestino.getText()),Integer.parseInt(peso.getText()), Double.parseDouble(valorDeclarado.getText()),
+                        Integer.parseInt(tempoMaximo.getText()),Integer.parseInt(tipoCarga.getText()), barato.getText(), "PENDENTE"));
+            }
+            cargas.sort();
             mensagem.setText(msg);
             mensagem.setVisible(true);
 

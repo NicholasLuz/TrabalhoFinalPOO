@@ -1,4 +1,6 @@
 package src.com.acmehandel.gui;
+import src.com.acmehandel.dados.*;
+import src.com.acmehandel.modelo.Navio;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,9 +11,12 @@ public class FormularioNavio extends JFrame {
     private JTextField campoNome, campoVelocidade, campoAutonomia, campoCustoMilhaBasico;
     private JButton botaoCadastrar, botaoMostrarCadastrados, botaoSair, botaoLimpar;
     private JLabel mensagemUsuario;
+    private Frota frota;
 
-    public FormularioNavio() {
+
+    public FormularioNavio(Frota frota) {
         super();
+        this.frota = frota;
         JPanel janelaPrincipal = new JPanel();
         janelaPrincipal.setLayout(new BorderLayout());
         setTitle("Cadastro de Navios");
@@ -65,7 +70,7 @@ public class FormularioNavio extends JFrame {
         botaoMostrarCadastrados.setForeground(Color.WHITE);
         botaoMostrarCadastrados.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // String todosCadastrados = cadastrados.mostrarFrota();
+                String todosCadastrados = frota.mostrarNavios();
                 JOptionPane.showMessageDialog(null, "todosCadastrados");
             }
         });
@@ -121,11 +126,8 @@ public class FormularioNavio extends JFrame {
         try {
             if (nome.isEmpty() || velocidade.isEmpty() || autonomia.isEmpty() || custoPorMilhaBasico.isEmpty()) {
                 throw new InputMismatchException("Preencha todos os campos!");
-            } /*
-               * if (cadastrados.consultarNomeFrota(nome)) {
-               * throw new IllegalArgumentException("Já existe um navio com este nome.");
-               * }
-               */
+            } if (frota.checkNomeNavioJaExiste(nome))
+                throw new IllegalArgumentException("Ja existe um navio com este nome.");
 
             try {
                 if (Double.parseDouble(autonomia) <= 0) {
@@ -170,10 +172,8 @@ public class FormularioNavio extends JFrame {
         int opcao = JOptionPane.showConfirmDialog(this, "Deseja confirmar o cadastro?", "Confirmação",
                 JOptionPane.YES_NO_OPTION);
         if (opcao == JOptionPane.YES_OPTION) {
-            /*
-             * cadastrados.novoNavio(nome,Double.parseDouble(velocidade),Double.parseDouble(
-             * autonomia), Double.parseDouble(custoPorMilhaBasico));
-             */
+            frota.adicionaNavio(new Navio(nome, Double.parseDouble(velocidade), Double.parseDouble(autonomia), Double.parseDouble(custoPorMilhaBasico)));
+            frota.sort();
             String mensagem = ("Navio cadastrado com sucesso!! " + "Nome: " + nome + " ; Velocidade: " + velocidade
                     + " ; Autonomia: " + autonomia + " ; Custo por milha basico: " + custoPorMilhaBasico);
             mensagemUsuario.setText(mensagem);

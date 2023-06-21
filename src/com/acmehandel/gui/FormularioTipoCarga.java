@@ -1,5 +1,7 @@
 package src.com.acmehandel.gui;
-
+import src.com.acmehandel.dados.*;
+import src.com.acmehandel.modelo.CargaDuravel;
+import src.com.acmehandel.modelo.CargaPerecivel;
 import src.com.acmehandel.modelo.TipoCarga;
 
 import javax.swing.*;
@@ -15,10 +17,11 @@ public class FormularioTipoCarga extends JFrame {
     private JRadioButton duravel, perecivel;
     private JButton botaoCadastrar, botaoMostrarCadastrados, botaoSair, botaoLimpar;
     private ButtonGroup botoesCheck;
-    private TipoCarga carga;
+    private TiposCargas tiposCargas;
 
-    public FormularioTipoCarga() {
+    public FormularioTipoCarga(TiposCargas tiposCargas) {
         super();
+        this.tiposCargas=tiposCargas;
         JPanel janelaPrincipal = new JPanel();
         janelaPrincipal.setLayout(new BorderLayout());
         setTitle("Cadastro de Tipo de Carga");
@@ -224,6 +227,12 @@ public class FormularioTipoCarga extends JFrame {
         botaoMostrarCadastrados = new JButton("Mostrar Cadastrados");
         botaoMostrarCadastrados.setBackground(Color.BLUE);
         botaoMostrarCadastrados.setForeground(Color.BLACK);
+        botaoMostrarCadastrados.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String todosCadastrados = tiposCargas.mostrarTiposCargas();
+                JOptionPane.showMessageDialog(null, todosCadastrados);
+            }
+        });
         botaoPainel.add(botaoMostrarCadastrados);
 
         botaoLimpar = new JButton("Limpar");
@@ -293,19 +302,19 @@ public class FormularioTipoCarga extends JFrame {
                         || materialPrincipal.getText().isEmpty() || percentualIpi.getText().isEmpty()) {
                     throw new InputMismatchException("Preencha todos os campos!");
                 }
-                /*
-                 * if (numero ja existe) {
-                 * throw new
-                 * IllegalArgumentException("Já existe um tipo de carga com este codigo.");
-                 * }
-                 */
+
                 try {
                     Integer.parseInt(numero.getText());
+                    if (tiposCargas.checkTipoCargaJaExiste(Integer.parseInt(numero.getText()))) {
+                        throw new IllegalArgumentException("Já existe um tipo de carga com este codigo.");
+                    }
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(this, "O campo 'Codigo' só pode conter numeros", "Erro",
                             JOptionPane.ERROR_MESSAGE);
                     return;
-                }
+                } catch (IllegalArgumentException f){JOptionPane.showMessageDialog(this, f.getMessage(), "Erro",
+                        JOptionPane.ERROR_MESSAGE);
+                    return;}
                 try {
                     if (Double.parseDouble(percentualIpi.getText()) < 0) {
                         throw new NumberFormatException("O campo 'IPI' precisa ser um numero maior que zero.");
@@ -350,14 +359,19 @@ public class FormularioTipoCarga extends JFrame {
         int opcao = JOptionPane.showConfirmDialog(this, "Deseja confirmar o cadastro?", "Confirmação",
                 JOptionPane.YES_NO_OPTION);
         if (opcao == JOptionPane.YES_OPTION) {
+            if(duravel.isSelected()){
+                tiposCargas.adicionaTipoCarga(new CargaDuravel(Integer.parseInt(numero.getText()),descricao.getText(),setor.getText(),materialPrincipal.getText(),
+                Double.parseDouble(percentualIpi.getText())));
+            }
+            else{
+                tiposCargas.adicionaTipoCarga(new CargaPerecivel(Integer.parseInt(numero.getText()),descricao.getText(),origem.getText(),Integer.parseInt(tempoMaximo.getText())));
+            }
+            tiposCargas.sort();
             mensagem.setText(msg);
             mensagem.setVisible(true);
 
             limparCampos();
             escondeCampos();
         }
-    }
-
-    public void setCarga(TipoCarga carga) {
     }
 }
