@@ -1,7 +1,10 @@
 package src.com.acmehandel.dados;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
 import src.com.acmehandel.modelo.Porto;
 
 public class Portos {
@@ -65,5 +68,9 @@ public class Portos {
 
   public void sort() {
     portos.sort((p1, p2) -> p1.getId() - p2.getId());
+  }
+
+  public List<Porto> getPortos() {
+    return portos.stream().collect(Collectors.toList());
   }
 }

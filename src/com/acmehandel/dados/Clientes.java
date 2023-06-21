@@ -1,6 +1,9 @@
 package src.com.acmehandel.dados;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import src.com.acmehandel.modelo.Cliente;
 
 public class Clientes {
@@ -45,5 +48,9 @@ public class Clientes {
 
   public void sort() {
     clientes.sort((c1, c2) -> c1.getCod() - c2.getCod());
+  }
+
+  public List<Cliente> getClientes() {
+    return clientes.stream().collect(Collectors.toList());
   }
 }

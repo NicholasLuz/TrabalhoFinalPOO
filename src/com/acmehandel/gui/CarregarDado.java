@@ -1,6 +1,5 @@
 package src.com.acmehandel.gui;
 
-import src.app.App;
 import src.com.acmehandel.dados.*;
 import src.com.acmehandel.util.CSVReader;
 

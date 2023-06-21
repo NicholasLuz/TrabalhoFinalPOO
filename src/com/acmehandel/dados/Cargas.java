@@ -69,4 +69,8 @@ public class Cargas {
         .collect(Collectors.toList());
   }
 
+  public List<Carga> getCargas() {
+    return cargas.stream().collect(Collectors.toList());
+  }
+
 }

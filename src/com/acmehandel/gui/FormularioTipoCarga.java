@@ -2,7 +2,6 @@ package src.com.acmehandel.gui;
 import src.com.acmehandel.dados.*;
 import src.com.acmehandel.modelo.CargaDuravel;
 import src.com.acmehandel.modelo.CargaPerecivel;
-import src.com.acmehandel.modelo.TipoCarga;
 
 import javax.swing.*;
 import java.awt.*;
@@ -119,7 +118,6 @@ public class FormularioTipoCarga extends JFrame {
         });
 
         GridBagConstraints constraints = new GridBagConstraints();
-        Insets insets = new Insets(5, 5, 5, 5);
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.WEST;

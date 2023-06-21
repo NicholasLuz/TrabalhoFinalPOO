@@ -1,6 +1,9 @@
 package src.com.acmehandel.dados;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import src.com.acmehandel.modelo.Distancia;
 
 public class Distancias {
@@ -44,5 +47,9 @@ public class Distancias {
       dist = ("Não há distâncias cadastradas.");
     }
     return dist;
+  }
+
+  public List<Distancia> getDistancias() {
+    return distancias.stream().collect(Collectors.toList());
   }
 }

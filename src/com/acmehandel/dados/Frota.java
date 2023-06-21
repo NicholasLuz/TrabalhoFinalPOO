@@ -1,6 +1,9 @@
 package src.com.acmehandel.dados;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import src.com.acmehandel.modelo.Navio;
 import src.com.acmehandel.modelo.Prioridade;
 
@@ -89,5 +92,9 @@ public class Frota {
       }
     }
     return false;
+  }
+
+  public List<Navio> getFrota() {
+    return frota.stream().collect(Collectors.toList());
   }
 }

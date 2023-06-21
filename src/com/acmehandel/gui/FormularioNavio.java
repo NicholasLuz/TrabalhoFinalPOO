@@ -67,7 +67,7 @@ public class FormularioNavio extends JFrame {
         botaoMostrarCadastrados.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String todosCadastrados = frota.mostrarNavios();
-                JOptionPane.showMessageDialog(null, "todosCadastrados");
+                JOptionPane.showMessageDialog(null, todosCadastrados);
             }
         });
         buttonPanel.add(botaoMostrarCadastrados);

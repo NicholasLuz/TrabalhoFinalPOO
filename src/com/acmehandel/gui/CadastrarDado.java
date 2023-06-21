@@ -1,7 +1,6 @@
 package src.com.acmehandel.gui;
 
 import src.app.App;
-import src.com.acmehandel.dados.*;
 
 import javax.swing.*;
 import java.awt.*;

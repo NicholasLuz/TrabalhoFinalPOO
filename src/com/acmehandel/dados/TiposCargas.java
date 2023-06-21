@@ -1,6 +1,9 @@
 package src.com.acmehandel.dados;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import src.com.acmehandel.modelo.CargaDuravel;
 import src.com.acmehandel.modelo.CargaPerecivel;
 import src.com.acmehandel.modelo.TipoCarga;
@@ -54,5 +57,9 @@ public class TiposCargas {
 
   public void sort() {
     tiposCargas.sort((tc1, tc2) -> tc1.getNumero() - tc2.getNumero());
+  }
+
+  public List<TipoCarga> getTiposCargas() {
+    return tiposCargas.stream().collect(Collectors.toList());
   }
 }

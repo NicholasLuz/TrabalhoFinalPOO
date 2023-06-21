@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.util.InputMismatchException;
 
 public class SalvarDados extends JFrame {
-    private App app;
     private JTextField pathName;
     private JPanel painel;
     private JLabel label;
@@ -18,7 +17,6 @@ public class SalvarDados extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(300, 150);
         setLocationRelativeTo(null);
-        this.app=app;
         painel = new JPanel();
         label = new JLabel("Insira o nome do arquivo: ");
         pathName = new JTextField(20);

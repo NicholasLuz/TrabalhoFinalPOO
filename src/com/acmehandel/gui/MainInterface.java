@@ -1,7 +1,5 @@
 package src.com.acmehandel.gui;
 import src.app.App;
-import src.com.acmehandel.dados.*;
-import src.com.acmehandel.modelo.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,11 +8,9 @@ import java.awt.event.ActionListener;
 public class MainInterface extends JFrame {
     private JButton cadastrarNovoDado, consultarCargas, alterarCargas, fretarCargas, salvarDados, carregarDados, sair;
     private JPanel painel;
-    private App app;
 
     public MainInterface(App app) {
         super("Menu inicial");
-        this.app = app;
         setSize(400, 400);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -41,35 +37,35 @@ public class MainInterface extends JFrame {
         consultarCargas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ConsultarCarga cc = new ConsultarCarga(app.getCargas().mostrarCargas());
+                new ConsultarCarga(app.getCargas().mostrarCargas());
             }
         });
         painel.add(alterarCargas);
         alterarCargas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AlterarSituacaoCarga asc = new AlterarSituacaoCarga(app);
+                new AlterarSituacaoCarga(app);
             }
         });
         painel.add(fretarCargas);
         fretarCargas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FretarCarga fc = new FretarCarga(app);
+                new FretarCarga(app);
             }
         });
         painel.add(salvarDados);
         salvarDados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SalvarDados sd = new SalvarDados(app);
+                new SalvarDados(app);
             }
         });
         painel.add(carregarDados);
         carregarDados.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CarregarDado cd = new CarregarDado(app.getClientes(), app.getCargas(), app.getDistancias(), app.getFrota(), app.getPortos(), app.getTiposCargas());
+                new CarregarDado(app.getClientes(), app.getCargas(), app.getDistancias(), app.getFrota(), app.getPortos(), app.getTiposCargas());
             }
         });
         painel.add(sair);

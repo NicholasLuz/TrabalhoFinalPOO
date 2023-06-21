@@ -8,11 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class FretarCarga extends JFrame {
-    private App app;
     private JButton voltar;
     public FretarCarga(App app) {
         super();
-        this.app = app;
         setTitle("Fretar cargas");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(500,400);

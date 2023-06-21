@@ -5,10 +5,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import src.com.acmehandel.dados.*;
-import src.com.acmehandel.gui.MainInterface;
 import src.com.acmehandel.modelo.*;
 import src.com.acmehandel.util.CSVReader;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 
 public class App {
   private Frota frota = new Frota();
@@ -18,7 +20,6 @@ public class App {
   private Distancias distancias = new Distancias();
   private TiposCargas tiposCargas = new TiposCargas();
   private Scanner teclado = new Scanner(System.in);
-  private Scanner entradaTerminal; // Atributo para entrada de dados
   private PrintStream standard = System.out;
   private PrintStream streamSaida;
 
@@ -44,19 +45,6 @@ public class App {
 
   public TiposCargas getTiposCargas() {
     return tiposCargas;
-  }
-
-  private void menuAdicionarDado() {
-    System.out.println("Você selecionou adicionar novo dado.");
-    System.out.println("--- Qual das opções deseja adicionar? ---");
-    System.out.println("| (1) Porto                             |");
-    System.out.println("| (2) Navio                             |");
-    System.out.println("| (3) Cliente                           |");
-    System.out.println("| (4) Tipo de Carga                     |");
-    System.out.println("| (5) Carga                             |");
-    System.out.println("| (6) Voltar ao menu anterior           |");
-    System.out.println("| (0) Encerrar o programa               |");
-    System.out.println("-----------------------------------------");
   }
 
   public int escolherOpcaoMenuAdicionarDado() {
@@ -355,9 +343,9 @@ public class App {
       c.setSituacao(sit);
       frase = "A carga "+c.getId()+" foi alterada para " + c.getSituacao();
     } else if (sit.equals(Situacao.LOCADO.name())) {
-      frase = "Para alterar a situação para LOCADO, é necessário alocar todos os pedidos pendentes: " + fretarCargaEspecifica(c.getId());
+      frase = "Locando o melhor navio disponível para a carga... " + fretarCargaEspecifica(c.getId());
     } else if (sit.equals(Situacao.CANCELADO.name())){
-      frase = "Situação solicitada igual a atual.";
+      frase = "A carga j\u00E1 se encontra no estado cancelado.";
     }
     else if ((sit.equals(Situacao.FINALIZADO.name()))){
       frase = "Não é possivel finalizar uma carga cancelada.";
@@ -374,9 +362,9 @@ public class App {
       c.setSituacao(sit);
       frase = "A carga "+c.getId()+" foi alterada para " + c.getSituacao();
     } else if (sit.equals(Situacao.LOCADO.name())) {
-      frase = "Para alterar a situação para LOCADO, é necessário alocar todos os pedidos pendentes: " + fretarCargaEspecifica(c.getId());
+      frase = "Locando o melhor navio disponível para a carga... " + fretarCargaEspecifica(c.getId());
     } else if (sit.equals(Situacao.PENDENTE.name())){
-      frase = "Situação solicitada igual a atual.";
+      frase = "A carga já se encontra no estado pendente.";
     }
     else if ((sit.equals(Situacao.FINALIZADO.name()))){
       frase = "Não é possivel finalizar uma carga pendente.";
@@ -404,6 +392,9 @@ public class App {
       String nomeNav = c.getNomeNavio();
       Navio n = frota.getNavioNome(nomeNav);
       n.setIsTransportingFalse();
+      c.removerNavio();
+    } else {
+      return ("A carga já está locada.");
     }
     return ("A carga "+c.getId()+"foi alterada para " + c.getSituacao());
   }
@@ -426,7 +417,7 @@ public class App {
   public String fretarCargas(List<Carga> cargasPendentes) {
     String fretados ="";
     if (cargasPendentes.isEmpty()){
-      fretados="Não há navios pendentes.";
+      fretados="Não há cargas pendentes.";
     }
     for (Carga c : cargasPendentes) {
       try {
@@ -472,26 +463,38 @@ public class App {
   }
 
   public String salvarDados(String pathname) {
+
     try {
       streamSaida = new PrintStream(new File(pathname));
+
+      JsonObject jsonObject = new JsonObject();
+      jsonObject.add("cargas", createJsonArray(cargas.getCargas()));
+      jsonObject.add("frota", createJsonArray(frota.getFrota()));
+      jsonObject.add("portos", createJsonArray(portos.getPortos()));
+      jsonObject.add("distancias", createJsonArray(distancias.getDistancias()));
+      jsonObject.add("clientes", createJsonArray(clientes.getClientes()));
+      jsonObject.add("tiposCargas", createJsonArray(tiposCargas.getTiposCargas()));
       System.setOut(streamSaida);
-      Gson gson = new Gson();
-      String json = gson.toJson(cargas);
+      Gson gson = new GsonBuilder().setPrettyPrinting().create();
+      String json = gson.toJson(jsonObject);
       System.out.println(json);
-      String json2 = gson.toJson(frota);
-      System.out.println(json2);
-      String json3 = gson.toJson(portos);
-      System.out.println(json3);
-      String json4 = gson.toJson(distancias);
-      System.out.println(json4);
-      String json5 = gson.toJson(clientes);
-      System.out.println(json5);
-      String json6 = gson.toJson(tiposCargas);
-      System.out.println(json6);
+
       System.setOut(standard);
     } catch (Exception e) {
       e.printStackTrace();
     }
     return "Dados salvados com sucesso em: " + pathname;
   }
+
+  private static JsonArray createJsonArray(List<?> list) {
+        JsonArray jsonArray = new JsonArray();
+        for (Object item : list) {
+            Gson gson = new Gson();
+            JsonObject itemObject = gson.toJsonTree(item).getAsJsonObject();
+            jsonArray.add(itemObject);
+        }
+        return jsonArray;
+    }
+
 }
+

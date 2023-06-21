@@ -74,6 +74,11 @@ public class Carga {
     setSituacao(Situacao.LOCADO.name());
   }
 
+  public void removerNavio() {
+    this.valorFrete = 0.0;
+    this.navio = null;
+  }
+
   public boolean setSituacao(String sit) {
     try {
       if (situacao.equals(Situacao.CANCELADO.name())) {
