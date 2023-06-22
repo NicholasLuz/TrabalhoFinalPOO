@@ -231,8 +231,9 @@ public class App {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
       String json = gson.toJson(jsonObject);
       System.out.println(json);
-
       System.setOut(standard);
+
+      salvarCsv(pathname);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -247,6 +248,70 @@ public class App {
       jsonArray.add(itemObject);
     }
     return jsonArray;
+  }
+
+  private String salvarCsv(String pathname) {
+    String[] nomesArquivos = { "PORTOS", "DISTANCIAS", "NAVIOS", "CLIENTES", "TIPOSCARGAS", "CARGAS" };
+    try {
+      for (String file : nomesArquivos) {
+        PrintStream streamSaida = new PrintStream(new File("resources\\csv\\"+pathname+"-"+file+".csv"));
+        System.setOut(streamSaida);
+
+        switch (file) {
+          case "PORTOS":
+            System.out.println("id;nome;pais");
+            for(Porto p : portos.getPortos()) {
+              System.out.println(p.getId()+";"+p.getNome()+";"+p.getPais());
+            }
+            break;
+          case "DISTANCIAS":
+            System.out.println("origem;destino;distancia");
+            for(Distancia d : distancias.getDistancias()) {
+              System.out.println(d.getIdOrigem()+";"+d.getIdDestino()+";"+d.getDistancia());
+            }
+            break;
+          case "NAVIOS":
+            System.out.println("nome;velocidade;autonomia;customilhabasico");
+            for(Navio n : frota.getFrota()) {
+              System.out.println(n.getNome()+";"+n.getVelocidade()+";"+n.getAutonomia()+";"+n.getCustoPorMilhaBasico());
+            }
+            break;
+          case "CLIENTES":
+            System.out.println("cod;nome;email");
+            for(Cliente c : clientes.getClientes()) {
+              System.out.println(c.getCod()+";"+c.getNome()+";"+c.getEmail());
+            }
+            break;
+          case "TIPOSCARGAS":
+            System.out.println("Numero;descricao;categoria;origem_setor;tempomaximo_material");
+            for(TipoCarga tc : tiposCargas.getTiposCargas()) {
+              if (tc instanceof CargaDuravel) {
+                CargaDuravel tc2 = (CargaDuravel)tc;
+                System.out.println(tc2.getNumero()+";"+tc2.getDescricao()+";DURAVEL;"+tc2.getSetor()+";"+tc2.getMaterialPrincipal()+";"+tc2.getPercentualIpi());
+              } else if(tc instanceof CargaPerecivel) {
+                CargaPerecivel tc2 = (CargaPerecivel)tc;
+                System.out.println(tc2.getNumero()+";"+tc2.getDescricao()+";PERECIVEL;"+tc2.getOrigem()+";"+tc2.getTempoMaximoValidade());
+              }
+            }
+            break;
+          case "CARGAS":
+            System.out.println("codigo;cliente;origem;destino;peso;valordeclarado;tempomaximo;tipocarga;prioridade;situacao");
+            for(Carga c : cargas.getCargas()) {
+              System.out.println(c.getId()+";"+c.getIdCliente()+";"+c.getIdPortoOrigem()+";"+c.getIdPortoDestino()+";"+c.getPeso()+";"+c.getValorDeclarado()+";"+c.getTempoMaximo()+";"+c.getIdTipoCarga()+";"+c.getPrioridade()+";"+c.getSituacao());
+            }
+            break;
+          default:
+            break;
+        }
+        
+        streamSaida.close();
+      }
+      
+      System.setOut(standard);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return "Dados salvados com sucesso em: " +pathname;
   }
 }
 

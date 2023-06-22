@@ -45,8 +45,6 @@ public class AlterarSituacaoCarga extends JFrame{
         botaoPainelMostra.setLayout(new FlowLayout());
 
         mostrar = new JButton("Mostrar carga digitada");
-        mostrar.setBackground(Color.BLUE);
-        mostrar.setForeground(Color.WHITE);
         mostrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -82,8 +80,6 @@ public class AlterarSituacaoCarga extends JFrame{
         botaoPainel.setLayout(new FlowLayout());
 
         alterar = new JButton("Alterar");
-        alterar.setBackground(Color.BLUE);
-        alterar.setForeground(Color.WHITE);
         alterar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 alteraCargas();
@@ -93,8 +89,6 @@ public class AlterarSituacaoCarga extends JFrame{
 
 
         voltar = new JButton("Voltar");
-        voltar.setBackground(Color.BLACK);
-        voltar.setForeground(Color.WHITE);
         voltar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 dispose();
@@ -107,7 +101,7 @@ public class AlterarSituacaoCarga extends JFrame{
         add(janelaPrincipal);
         mensagem = new JLabel();
         mensagem.setHorizontalAlignment(JLabel.CENTER);
-        mensagem.setForeground(Color.BLUE);
+        mensagem.setForeground(Color.RED);
         mensagem.setFont(new Font("Arial", Font.BOLD, 13));
         mensagem.setVisible(false);
         add(mensagem, BorderLayout.NORTH);

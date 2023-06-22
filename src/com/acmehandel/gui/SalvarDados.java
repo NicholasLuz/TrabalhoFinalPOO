@@ -40,7 +40,7 @@ public class SalvarDados extends JFrame {
                     JOptionPane.showMessageDialog(SalvarDados.this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                JOptionPane.showMessageDialog(SalvarDados.this, "Arquivo carregado com sucesso!");
+                JOptionPane.showMessageDialog(SalvarDados.this, "Arquivo salvo com sucesso!");
 
                 pathName.setText("");
             }
